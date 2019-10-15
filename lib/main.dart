@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:dio/dio.dart';
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
 
 class EbaySearchState extends State<EbaySearch> {
   final TextEditingController _query = TextEditingController();
+  var dio = Dio();
+
   String _queryText = '';
   String _queryURL = 'https://api.ebay.com/buy/browse/v1/item_summary/search?';
   Widget _appTitle = Text('eBay Search App');
@@ -102,19 +106,30 @@ class EbaySearchState extends State<EbaySearch> {
         _appTitle = Text('eBay Search App');
       }
       print('_queryText is: ' + _queryText);
+      _getQueryResults();
     });
   }
 
   String _buildQueryURL() {
     // Build the query URL based on what user entered
     String _finalURL = _queryURL + 'q=' + _queryText;
-    print("finalURL is: " + _finalURL);
+    print('finalURL is: ' + _finalURL);
     return _finalURL;
   }
 
   void _getQueryResults() async {
     // Get results from eBay API with query text
-//    final response = await Dio().get(_buildQueryURL());
+    try {
+      final Response response = await dio.get<void>(_buildQueryURL(),
+      options: Options(headers: {
+          HttpHeaders.authorizationHeader: '';
+        }),
+      );
+      print(response);
+    }
+    catch (e) {
+      print(e);
+    }
   }
 }
 
