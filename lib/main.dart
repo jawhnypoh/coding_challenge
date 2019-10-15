@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
 class EbaySearchState extends State<EbaySearch> {
   final TextEditingController _query = TextEditingController();
   var dio = Dio();
+  List items = List();
   String _queryText = '';
   String _queryURL = 'https://api.ebay.com/buy/browse/v1/item_summary/search?';
   Widget _appTitle = Text('eBay Search App');
@@ -81,7 +82,20 @@ class EbaySearchState extends State<EbaySearch> {
   }
 
   Widget _buildResultsList() {
-
+    return ListView.builder(
+      itemCount: items == null ? 0 : items.length,
+      itemBuilder: (BuildContext context, int idx) {
+        return ListTile(
+          title: Text(items[idx]['title']),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DetailedItem()),
+            );
+          },
+        );
+      },
+    );
   }
 
   // If query button is pressed, change the state to allow user to search
@@ -121,13 +135,34 @@ class EbaySearchState extends State<EbaySearch> {
     dio.options.headers = {'Authorization' : authToken};
     // Get results from eBay API with query text
     try {
-      final Response response = await dio.get<void>(_buildQueryURL()
-      );
+      final Response response = await dio.get<void>(_buildQueryURL());
       print(response);
+
+      List resultsList = List();
+      for(int i=0; i<response.data['itemSummaries'].length; i++) {
+        resultsList.add(response.data['itemSummaries'][i]);
+      }
+      setState(() {
+        items = resultsList;
+      });
     }
     catch (e) {
       print(e);
     }
+  }
+}
+
+class DetailedItemState extends State<DetailedItem> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Item Details'),
+      ),
+      body: Center(
+        child: Text('Item Details Here'),
+      ),
+    );
   }
 }
 
@@ -136,19 +171,7 @@ class EbaySearch extends StatefulWidget {
   EbaySearchState createState() => EbaySearchState();
 }
 
-// Ebay Response List Object
-class ResponseList {
-  final int total;
-  final List<Item> itemSummaries;
-
-  ResponseList({this.total, this.itemSummaries});
-}
-
-// EBay Response Individual Item Object
-class Item {
-  final String itemId;
-  final String title;
-  final String condition;
-
-  Item({this.itemId, this.title, this.condition});
+class DetailedItem extends StatefulWidget {
+  @override
+  DetailedItemState createState() => DetailedItemState();
 }
