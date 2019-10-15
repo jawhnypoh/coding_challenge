@@ -82,11 +82,12 @@ class EbaySearchState extends State<EbaySearch> {
   }
 
   Widget _buildResultsList() {
-    return ListView.builder(
+    return ListView.separated(
       itemCount: items == null ? 0 : items.length,
       itemBuilder: (BuildContext context, int idx) {
         return ListTile(
           title: Text(items[idx]['title']),
+          subtitle: Text('\$' + items[idx]['price']['value']),
           onTap: () {
             Navigator.push(
               context,
@@ -94,6 +95,9 @@ class EbaySearchState extends State<EbaySearch> {
             );
           },
         );
+      },
+      separatorBuilder: (context, index) {
+        return Divider();
       },
     );
   }
@@ -125,13 +129,13 @@ class EbaySearchState extends State<EbaySearch> {
 
   // Build the query URL based on what user entered
   String _buildQueryURL() {
-    final String _finalURL = _queryURL + 'q=' + _queryText;
+    final String _finalURL = _queryURL + 'q=' + _queryText + '&limit=100';
     print('finalURL is: ' + _finalURL);
     return _finalURL;
   }
 
   void _getQueryResults() async {
-    final String authToken = 'Bearer v^1.1#i^1#f^0#p^1#I^3#r^0#t^H4sIAAAAAAAAAOVYa2wUVRTudNuShlaDCK2NP9bhESKZ2Xt3uq+hu7p9QLdAu3TbpVQJzM7caYfuzkzmzrJdErGpPEwADYpKMTGAgRDjA1BDMKEEE6NGHvIsgsEHChJjiP6QBDVxZncp20papBts4v7ZzLnnnvud7zvn3jsDeoqKH19Xv+5GKTEhf3sP6MknCDgRFBcVzn7Akl9RmAeyHIjtPdN7CnotP1VhLhZV2WaEVUXGyNodi8qYTRm9ZFyTWYXDEmZlLoYwq/NsyL9wAWunAatqiq7wSpS0Bmq9JC8AOwJOJESQg4F2YFjlWzFbFC9pZ0QEnRBGPFBEqDJijGMcRwEZ65ysG+MAeigIKOhoAZUsA1jGRTMueztpDSMNS4psuNCA9KXgsqm5WhbWkaFyGCNNN4KQvoB/bqjJH6ita2ypsmXF8mV4COmcHsdDn2oUAVnDXDSORl4Gp7zZUJznEcakzZdeYWhQ1n8LzD3AT1EdcXERKAJgdwsOh9vO54TKuYoW4/SRcZgWSaDElCuLZF3Sk6MxarARWYF4PfPUaIQI1FrNv0VxLiqJEtK8ZF21f4k/GCR9DUqnLCeDCmVQLskdNZ1UsLmWYiIMFCGoFCjkrGTcosBnFkpHy9A8bKUaRRYkkzRsbVT0amSgRsO5sWdxYzg1yU2aX9RNRNl+zlscOmG7KWpaxbjeKZu6ophBhDX1OLoCg7N1XZMicR0NRhg+kKLIS3KqKgnk8MFULWbKpxt7yU5dV1mbLZFI0AmGVrQOmx0AaGtbuCDEd6IYRxq+Zq+n/aXRJ1BSKhUeGTOxxOpJ1cDSbdSqAUDuIH2VALoYd4b3obB8w63/MGTlbBvaEbnqEI4XXVAAgGEAcDoZJhcd4ssUqc3EgSJckopxWhfS1SjHI4o36iweQ5oksIxDtBtFiijB6RGpSo8oUhGH4KTMfQ8gFInwHvf/qVHuttRDiNeQnpNaz1mdB5NSF6pra0s4Ztc7g3X+JYtd1YIot4dm18xvbfbUtbU73ZHqRXi+q8N7t91w5+R5RUVBJSrxyRwwYPZ6DllgNCHIaXoyhKJRwzCmRLGZ6PgS2ZyPjQCcKtFmY9O8ErMpnLGjm6ZlKcRjytmvqoFYLK5zkSgK5GY3/4928jumJxl3nXGVk6FfWkhJSF9S6JSaNF7J0xrCSlwz7md0k3lmtyhdSDZ2QF1TolGkheGYhb7f+pq9Pgof//KwuLfcc3dTGU+1zUclo4SWjbfM7ouiEjfOTmPocEEIGTfjGlNeNSlNW5Lj7RyqV7COhJFSK5h3j9dq29CXfF9e6gd7iQ9BL7EvnyCADcyA08BjRZbWAktJBZZ0REucSGOpQzbeXTVEd6GkyklafhEhvXRq/dmszwrbl4LywQ8LxRY4MesrA3j09kghfLCsFHoggA5QyQDG1Q6m3R4tgFMLHraUJ1br55UJS/oO3xA3HaW04MAjoHTQiSAK8wp6ibwnHxq4tmsgfOlkyVJH/5TCI+8enTGZO/NEefP1089dPDC98ZDrfefMD+aV/nb1+znnlu/ZWv7qz8f7/kw8vybUN3VHycw927rD/vPE64vWVcwTjn3z8VsTLhf9MfnZMx/98HndVy9svOzexUkDi+3Lzzbu7/z66CbsqLJ9uXbDviMW1vfrU5/1/zjnwtMC2llyetszV1o/uR46F1bf6N9zcP/xjWuLV646eQHdLPv2wKSLVcENnl9efPm1y5vJlmOnyr64GtxCqBWz+r17e9+7dulwWYNr7+Kt4eW7PwUbJ/Wt/v3gwI41U9bfBCfAsfoTu//anLfm0JVprSumN7xyhthyhG14c+eVWd+tWi8yq99+Jy3f3yLk/jHwEQAA';
+    final String authToken = 'Bearer v^1.1#i^1#p^1#f^0#I^3#r^0#t^H4sIAAAAAAAAAOVYa2wUVRTuttvKq/hDESQI7YAPKDt778w+B3bJ9kF3KaVLt61tkcDszJ3t0NmZde5dyxqF2pCCRIOKYkSMNSbERE3kB4YY/UF8EYIGiQI/IPFBkKCQQAwai4+Z2aVsK2mRbrCJ+2cz55577ne+75x77wzoLZu8qD/c/2u57Y7igV7QW2yzwalgcllp1fSS4tmlRSDPwTbQu6DX3ldybinmk0qKa0Y4pakYVWxMKirmLGOASusqp/FYxpzKJxHmiMDFQo0rOYYGXErXiCZoClURqQ1QiOG9rAu5vR5/nHUz0LCq12K2aAHK5eOZuMj6xDgLBL/bY4xjnEYRFRNeJQGKAdDvgMAB3S3AwzGQYxgaukAnVdGGdCxrquFCAypoweWsuXoe1tGh8hgjnRhBqGAktDzWFIrU1q1qWerMixXM8RAjPEnj4U81mogq2ngljUZfBlveXCwtCAhjyhnMrjA8KBe6BuYW4FtUs8Dv90sAsW6fX3AxTEGoXK7pSZ6MjsO0yKJDslw5pBKZZMZi1GAjvgEJJPe0yggRqa0w/1aneUWWZKQHqLrqUEcoGqWCK7QuVc1ENYdBuawmaroc0eZaBxtnoQSBS3Qgj4v1SaKQWygbLUfziJVqNFWUTdJwxSqNVCMDNRrJDczjxnBqUpv0kERMRPl+vmscsu5OU9SsimnSpZq6oqRBRIX1OLYCQ7MJ0eV4mqChCCMHLIoCFJ9KySI1ctCqxVz5bMQBqouQFOd09vT00D0srekJJwMAdLY3rowJXSjJU4av2etZf3nsCQ7ZSkVAxkwscySTMrBsNGrVAKAmqKALQC/ry/E+HFZwpPUfhrycncM7olAdgpAgAEFwAyhKcUmSCtEhwVyROk0cKM5nHEle70YkpfACcghGnaWTSJdFjnVLjFGkyCF6/JLD5ZckR9wtehxQQgggFI8Lft//qVFuttRjSNARKUitF6zOoxm5G9W1t/e4q8KeaF2o42FvtSipnbGqmobWZn9de6fHF69ejRu8icDNdsONkxe0FIpqiixkCsCA2esFZIHVxSivk0wMKYphGFei2Ex0YolszsdGAD4l02Zj04KWdGq8saObpnUW4nHlHEqlIslkmvBxBUUKs5v/Rzv5DdOTjbvOhMrJ0C8rpCxmLym0pSaNHxNoHWEtrRv3M7rJPLNbtG6kGjsg0TVFQXobHLfQt1tfs9fH4ONfHha3lnvhbioTqbYFRTZKaN1Ey+y2KCrzE+w0hm4vhAxw+Zhx5VVjadqSmWjnUFjDBImjpWavv8VrtXP4S36wyPrBPtt+0GfbV2yzASe4H84HlWUlrfaSabOxTBAt8xKN5YRqvLvqiO5GmRQv68VlNvmFY1u/yfusMLAWzBr6sDC5BE7N+8oA5lwfKYV3ziyHfgigG3gYyDCdYP71UTu8x3534s2qr7b/8WPjpfq9zeWXAh+07Tt7FZQPOdlspUX2PlvRzqPTFpxe8eGUU0+dvOvJiwtPbHuo6ruPScOa+vPqrleirS8lng/+VouKHnxbq1x3YWDLwdi3bw00KmdXvrF/e0fU/3r5lLWdl48d7/NSyrTKOacaznOfLTn6xPrBL+aeXf9o9Z6Xt7Ue7rrvyulNC36+KP/JHG677J7evfvcEpHOPLJmcE7VrMHKQ4kdx79/bm1o5+aDs8KfPrtLWD6vfdnjZ8LR9z+hIhceeHXhkb2LDvyyo37Pa6dp/O4z27Z/zk66Opied7Tu5AZ6Rsd7mxcy8MDuQfT7pBN7bB/V2ufva/8686K3tPrMpi//YgZObt4SePrKvYunHunf+9MP78xb1jy3f/GhXeEZM4+Ht87Fela+vwFxtakK8BEAAA==';
     dio.options.headers = {'Authorization' : authToken};
     // Get results from eBay API with query text
     try {
