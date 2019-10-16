@@ -1,8 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'dart:async';
 
 void main() => runApp(MyApp());
 
@@ -113,7 +113,7 @@ class EbaySearchState extends State<EbaySearch> {
 
   // Get results from eBay API with query text
   void _getQueryResults(String _queryText) async {
-    final String authToken = 'Bearer v^1.1#i^1#p^1#r^0#I^3#f^0#t^H4sIAAAAAAAAAOVYW2gUVxjObjZpxUZFRaPYuh0rKYadPWfvM7oLm5vZmsvqbtIY1DiXM9lJdmeWOWebbLE0Ro19aCuEgrGiCCkUKX3QeoM+1Jda9cHaQimpUhSh9AYFK7XgpZ2ZXeMmlcSaxQa6L8v85z//+f7v+/9zzgwYKJ+zZqhx6HaF5RnrkQEwYLVY4Fwwp7ysel6pdXlZCShwsBwZeGnANlj64zrMpZJpdhPCaVXByN6fSiqYNY1BKqMprMphGbMKl0KYJQIbCzc3sS4asGlNJaqgJil7pC5IQQ8PIHBJrgDyMAIPdKvyIGZcDVJ+BAS3i+NFABjeI4j6OMYZFFEw4RQSpFwAMg4IHNAXB4B1u1jgpf1e0EnZ25GGZVXRXWhAhUy4rDlXK8A6NVQOY6QRPQgVioQbYq3hSF19S3ydsyBWKM9DjHAkgyc+1aoisrdzyQyaehlserOxjCAgjClnKLfCxKBs+AGYJ4BvUu3nGBfyBSTGL0JRZ7MoVDaoWoojU+MwLLLokExXFilEJtnpGNXZ4HuQQPJPLXqISJ3d+NuY4ZKyJCMtSNXXhDeHo1Eq9IqaUJRsVHXolMtKd23CEd1U53DzbihB4BEdyOdxByRRyC+Ui5anedJKtaoiygZp2N6ikhqko0aTuXEVcKM7tSqtWlgiBqJCP9cDDj2eTkPUnIoZklAMXVFKJ8JuPk6vwPhsQjSZzxA0HmHygElRkOLSaVmkJg+atZgvn34cpBKEpFmns6+vj+5z06rW7XQBAJ0dzU0xIYFSHKX7Gr2e85enn+CQzVQEpM/EMkuyaR1Lv16rOgClmwp5APS7A3neJ8IKTbb+w1CQs3NiRxSrQ5AfQCi4OTeC0Md5uWJ0SChfpE4DB+K5rCPFab2IpJOcgByCXmeZFNJkkXV7JZdepMgh+hjJ4WEkycF7RZ8DSggBhHheYAL/p0Z53FKPIUFDpCi1XrQ6j2blXlTf0dHnrW70RevDm1/114iS0hmrrt3Qtomp7+j0BfiajXiDvzv4uN3w6OQFNY2ialIWskVgwOj1IrLg1sQop5FsDCWTumFGiWIj0dklsjEf6wG4tEwbjU0LasqpcvqObpi6TMQzyjmcTkdSqQzh+CSKFGc3/4928kemJ+t3nVmVk65fTkhZzF1SaFNNGr8m0BrCakbT72d0q3Fmx9VepOg7INHUZBJp7XDGQj9tfY1en4aPf3lYPFnuxbupzKbaFpKyXkJdsy2zp6KozM2y0xh6/RAGvIzLO6O8ak1N49nZdg41qpggcarUbOuf8FrtnPiSHyoxf3DQchIMWo5ZLRbgBKvhKvBieWmbrfS55VgmiJY5icZyt6K/u2qI7kXZNCdr1nKLPPz13m8KPisc2Qoqxz8szCmFcwu+MoAVD0fK4PylFZCBAPoAcLuAtxOsejhqg0tsi+1XW4ai23Y2nTu6rKr9rfekZ4e2fAIqxp0slrIS26ClhDn2/o3T+9dc/L7xfC35NjTv/raFP30Zd94cHW37dXjl2NzPhUXUrfWe148uraraSiLHL5y52jx8/t69tjp1d6Xnsu3gz6NdXR6pYQEWGr57Y2wkfmN0F1O59u7uM22LLyZ2jlyvTPyAr97sWrll++IDJ5rZ+ddbP/tr7O5vlzoGD+0Ff1y60gNG7n28urny1v5Fb795pXrhuoNnVsBTfnSK6e554dqyrw5du3z2wx0Vgzd/X/4nv+NOQ5O2dgSfGL5DLzxbdemjji9OVy3ped5y4eWjp603Vp7c8wtYffv4ucORQ0nuHXzgWuTAu3JneMHhD85bPQfBvl0X1+4hvbc+bd9/+f7Y9n1Mf2NOvr8BHf0NLfARAAA=';
+    final String authToken = 'Bearer v^1.1#i^1#I^3#f^0#p^1#r^0#t^H4sIAAAAAAAAAOVYb2wTZRhf9w8GDAwxukyD9ZAPOO/63l17115oSdeObDC2sm5zLCK5P2/Xs+3d5d47Rk3UZcIGxIjRkIyIyYhoogYBE0P84BfEmUwElJAJHzRRSVSUOBZDCBC9u5bRTTKQNbjEfmnueZ/3eX/P7/c87/vegb7KqicHGgeuVLvmlQ73gb5Sl4tcCKoqK+oWl5XWVpSAAgfXcN8TfeX9ZT+vQnwmrXFtEGmqgqB7ayatIM4xBjFTVziVRzLiFD4DEWeIXDy8vpmjCMBpumqooprG3E3RIOb3kRSg/CItCBQQJcuo3AzZrgYxHw+9/gRFBfws6w/wjDWOkAmbFGTwihHEKEAGcBLgJNMOWI7ycjRFsBTTjbk7oY5kVbFcCICFHLScM1cvgDozUh4hqBtWECzUFF4Tbw03RRta2ld5CmKF8jTEDd4w0dSniCpBdyefNuHMyyDHm4uboggRwjyh3ApTg3Lhm2DuAb7DNG2xCKEfsMAb8PsYtihUrlH1DG/MjMO2yBKecFw5qBiykb0ToxYbwnNQNPJPLVaIpqjb/ttg8mk5IUM9iDXUhzeGYzEstFZNKko2puIW5bLSE0nisbYoTgs0mSCBV8Ih46X9CUnML5SLlqd52koRVZFkmzTkblGNemihhtO5IQu4sZxalVY9nDBsRIV+gZsckr5uW9SciqaRVGxdYcYiwu083lmBydmGocuCacDJCNMHHIqCGK9psoRNH3RqMV8+W1EQSxqGxnk8vb29RC9NqHqPhwKA9HStb46LSZjhMdvX7nXHX77zBFx2UhGhNRPJnJHVLCxbrVq1ACg9WMgLSJb253mfCis03foPQ0HOnqkdUawO8Qoi6RUYryQmKEaCVDE6JJQvUo+NAwp8Fs/wegoaWpoXIS5adWZmoC5LHO1LUFaRQlxiAgncG0gkcMEnMTiZgBBAKAhiwP9/apS7LfU4FHVoFKfWi1Xnsaycgg1dXb2+ukYm1hDe+DRbLyWU7nhdZF1HW6Chq5vxC/Ub0Dq2J3i33XD75EVVgzE1LYvZYjBg93rxWKB1KcbrRjYO02nLMKtEkZ3o3BLZno+sALwmE3ZjE6Ka8ai8taPbps0O4lnlHNa0pkzGNHghDZuKtJv/Nzv5bdOTrbvOnMrJ0i8npCzlLimEoyaBtoiEDpFq6tb9jGi1z+x2NQUVawc0dDWdhnonOWuh77u+uXN9Jj7+5WFxb7kX8aYyh2pbTMtWCW2ea5ndF0Vlfo6dxqSPJSkSMCw1q7wijqbt2bl2DjWqyIDSjKmVr7m3a7Vn6jt+qMT5kf2uj0G/60ipywU8YAW5HDxeWdZRXraoFskGJGQ+QSC5R7HeXXVIpGBW42W9tNIlv/7N4NmCrwrDm0DN5HeFqjJyYcFHBvDorZEKcsnD1WSABCQDWMpLU91g+a3RcvKh8gdLdqLdV4+VNY5envCFjoy98IV/JAyqJ51croqS8n5XyQImAsYv/Tk0sqNz8dKPdi/ZtL3tjd9fPs+O/jE2cL17weC3Sw4e33nyLU/Np+f41al9oyWpd/aO+B77q+6TGrqh4uszQ0fPd35GHbhWFdpF7AhvO3N62XDdxSvJlq9+wV5/D9SPa/u2p/bMO/Pjlp+W35hY+ciu+cPV0VPj310/9u7+A7XPdJT+EPv81z1nW0bHBsiO+U+FtiS/X5Sq2Y83xysOR6ODe33Xmlcuu3EJvfLBiJg8eOolc/DqhbXvv9m7etzsPC00Hj02OiTWTCx8+9nT60/ATcnRbRdo8gFA04cub5/Ye+LQivYW88ML617b5x9kh47PP3z1UEfky5MXx2qXvrj5VfXc85nfcvL9Dfr7GjHvEQAA';
     dio.options.headers = {'Authorization' : authToken};
     try {
       final Response response = await dio.get<void>(_buildQueryURL(_queryText));
@@ -135,14 +135,17 @@ class EbaySearchState extends State<EbaySearch> {
 class DetailedItemState extends State<DetailedItem> {
   String itemId;
   DetailedItemState(this.itemId);
+  final String _itemURL = 'https://api.ebay.com/buy/browse/v1/item/';
+  var dio = Dio();
+//  Info info = Info();
+  String parsedJson;
+  Future<Info> info;
 
   @override
   void initState() {
+    super.initState();
     this._getItemResults(itemId);
   }
-
-  final String _itemURL = 'https://api.ebay.com/buy/browse/v1/item/';
-  var dio = Dio();
 
   @override
   Widget build(BuildContext context) {
@@ -150,26 +153,73 @@ class DetailedItemState extends State<DetailedItem> {
       appBar: AppBar(
         title: Text('Item Details'),
       ),
-      body: Center(
-        child: Text(itemId),
-      ),
+      body: createItem(),
     );
   }
+
+  Widget createItem() {
+    return Scaffold(
+        body: Center(
+          child: FutureBuilder<Info>(
+              future: _getItemResults(itemId),
+              builder: (context, snapshot) {
+                if(snapshot.hasData) {
+                  return Container(
+                    child: Column(
+                      children: <Widget>[
+                        Text(snapshot.data.title),
+                        Text(snapshot.data.subtitle),
+                        Text(snapshot.data.itemId),
+                      ],
+                    )
+                  );
+                }
+                else {
+                  return Text("${snapshot.error}");
+                }
+                return CircularProgressIndicator();
+              }
+          ),
+        ),
+    );
+  }
+
+//  Widget createItem() {
+//    return Scaffold(
+//        body: ListView(
+//          children: <Widget>[
+//            ListTile(
+//              contentPadding: EdgeInsets.all(10.0),
+//              title: Text('Title',
+//                style: TextStyle(
+//                    fontSize: 25.0),
+//              ),
+//          subtitle: Text(info.subtitle),
+//            )
+//          ],
+//        )
+//    );
+//  }
 
   // Build the item detailed URL based on itemID
   String _buildItemURL(String itemId) {
     final String _finalURL = _itemURL + itemId;
-    print('finalURL is: ' + _finalURL);
+    print('_finalURL is: ' + _finalURL);
     return _finalURL;
   }
 
-  void _getItemResults(String itemId) async {
+  Future<Info> _getItemResults(String itemId) async {
     print('_getItemResults() called ');
-    final String authToken = 'Bearer v^1.1#i^1#p^1#r^0#I^3#f^0#t^H4sIAAAAAAAAAOVYW2gUVxjObjZpxUZFRaPYuh0rKYadPWfvM7oLm5vZmsvqbtIY1DiXM9lJdmeWOWebbLE0Ro19aCuEgrGiCCkUKX3QeoM+1Jda9cHaQimpUhSh9AYFK7XgpZ2ZXeMmlcSaxQa6L8v85z//+f7v+/9zzgwYKJ+zZqhx6HaF5RnrkQEwYLVY4Fwwp7ysel6pdXlZCShwsBwZeGnANlj64zrMpZJpdhPCaVXByN6fSiqYNY1BKqMprMphGbMKl0KYJQIbCzc3sS4asGlNJaqgJil7pC5IQQ8PIHBJrgDyMAIPdKvyIGZcDVJ+BAS3i+NFABjeI4j6OMYZFFEw4RQSpFwAMg4IHNAXB4B1u1jgpf1e0EnZ25GGZVXRXWhAhUy4rDlXK8A6NVQOY6QRPQgVioQbYq3hSF19S3ydsyBWKM9DjHAkgyc+1aoisrdzyQyaehlserOxjCAgjClnKLfCxKBs+AGYJ4BvUu3nGBfyBSTGL0JRZ7MoVDaoWoojU+MwLLLokExXFilEJtnpGNXZ4HuQQPJPLXqISJ3d+NuY4ZKyJCMtSNXXhDeHo1Eq9IqaUJRsVHXolMtKd23CEd1U53DzbihB4BEdyOdxByRRyC+Ui5anedJKtaoiygZp2N6ikhqko0aTuXEVcKM7tSqtWlgiBqJCP9cDDj2eTkPUnIoZklAMXVFKJ8JuPk6vwPhsQjSZzxA0HmHygElRkOLSaVmkJg+atZgvn34cpBKEpFmns6+vj+5z06rW7XQBAJ0dzU0xIYFSHKX7Gr2e85enn+CQzVQEpM/EMkuyaR1Lv16rOgClmwp5APS7A3neJ8IKTbb+w1CQs3NiRxSrQ5AfQCi4OTeC0Md5uWJ0SChfpE4DB+K5rCPFab2IpJOcgByCXmeZFNJkkXV7JZdepMgh+hjJ4WEkycF7RZ8DSggBhHheYAL/p0Z53FKPIUFDpCi1XrQ6j2blXlTf0dHnrW70RevDm1/114iS0hmrrt3Qtomp7+j0BfiajXiDvzv4uN3w6OQFNY2ialIWskVgwOj1IrLg1sQop5FsDCWTumFGiWIj0dklsjEf6wG4tEwbjU0LasqpcvqObpi6TMQzyjmcTkdSqQzh+CSKFGc3/4928kemJ+t3nVmVk65fTkhZzF1SaFNNGr8m0BrCakbT72d0q3Fmx9VepOg7INHUZBJp7XDGQj9tfY1en4aPf3lYPFnuxbupzKbaFpKyXkJdsy2zp6KozM2y0xh6/RAGvIzLO6O8ak1N49nZdg41qpggcarUbOuf8FrtnPiSHyoxf3DQchIMWo5ZLRbgBKvhKvBieWmbrfS55VgmiJY5icZyt6K/u2qI7kXZNCdr1nKLPPz13m8KPisc2Qoqxz8szCmFcwu+MoAVD0fK4PylFZCBAPoAcLuAtxOsejhqg0tsi+1XW4ai23Y2nTu6rKr9rfekZ4e2fAIqxp0slrIS26ClhDn2/o3T+9dc/L7xfC35NjTv/raFP30Zd94cHW37dXjl2NzPhUXUrfWe148uraraSiLHL5y52jx8/t69tjp1d6Xnsu3gz6NdXR6pYQEWGr57Y2wkfmN0F1O59u7uM22LLyZ2jlyvTPyAr97sWrll++IDJ5rZ+ddbP/tr7O5vlzoGD+0Ff1y60gNG7n28urny1v5Fb795pXrhuoNnVsBTfnSK6e554dqyrw5du3z2wx0Vgzd/X/4nv+NOQ5O2dgSfGL5DLzxbdemjji9OVy3ped5y4eWjp603Vp7c8wtYffv4ucORQ0nuHXzgWuTAu3JneMHhD85bPQfBvl0X1+4hvbc+bd9/+f7Y9n1Mf2NOvr8BHf0NLfARAAA=';
+    final String authToken = 'Bearer v^1.1#i^1#I^3#f^0#p^1#r^0#t^H4sIAAAAAAAAAOVYb2wTZRhf9w8GDAwxukyD9ZAPOO/63l17115oSdeObDC2sm5zLCK5P2/Xs+3d5d47Rk3UZcIGxIjRkIyIyYhoogYBE0P84BfEmUwElJAJHzRRSVSUOBZDCBC9u5bRTTKQNbjEfmnueZ/3eX/P7/c87/vegb7KqicHGgeuVLvmlQ73gb5Sl4tcCKoqK+oWl5XWVpSAAgfXcN8TfeX9ZT+vQnwmrXFtEGmqgqB7ayatIM4xBjFTVziVRzLiFD4DEWeIXDy8vpmjCMBpumqooprG3E3RIOb3kRSg/CItCBQQJcuo3AzZrgYxHw+9/gRFBfws6w/wjDWOkAmbFGTwihHEKEAGcBLgJNMOWI7ycjRFsBTTjbk7oY5kVbFcCICFHLScM1cvgDozUh4hqBtWECzUFF4Tbw03RRta2ld5CmKF8jTEDd4w0dSniCpBdyefNuHMyyDHm4uboggRwjyh3ApTg3Lhm2DuAb7DNG2xCKEfsMAb8PsYtihUrlH1DG/MjMO2yBKecFw5qBiykb0ToxYbwnNQNPJPLVaIpqjb/ttg8mk5IUM9iDXUhzeGYzEstFZNKko2puIW5bLSE0nisbYoTgs0mSCBV8Ih46X9CUnML5SLlqd52koRVZFkmzTkblGNemihhtO5IQu4sZxalVY9nDBsRIV+gZsckr5uW9SciqaRVGxdYcYiwu083lmBydmGocuCacDJCNMHHIqCGK9psoRNH3RqMV8+W1EQSxqGxnk8vb29RC9NqHqPhwKA9HStb46LSZjhMdvX7nXHX77zBFx2UhGhNRPJnJHVLCxbrVq1ACg9WMgLSJb253mfCis03foPQ0HOnqkdUawO8Qoi6RUYryQmKEaCVDE6JJQvUo+NAwp8Fs/wegoaWpoXIS5adWZmoC5LHO1LUFaRQlxiAgncG0gkcMEnMTiZgBBAKAhiwP9/apS7LfU4FHVoFKfWi1Xnsaycgg1dXb2+ukYm1hDe+DRbLyWU7nhdZF1HW6Chq5vxC/Ub0Dq2J3i33XD75EVVgzE1LYvZYjBg93rxWKB1KcbrRjYO02nLMKtEkZ3o3BLZno+sALwmE3ZjE6Ka8ai8taPbps0O4lnlHNa0pkzGNHghDZuKtJv/Nzv5bdOTrbvOnMrJ0i8npCzlLimEoyaBtoiEDpFq6tb9jGi1z+x2NQUVawc0dDWdhnonOWuh77u+uXN9Jj7+5WFxb7kX8aYyh2pbTMtWCW2ea5ndF0Vlfo6dxqSPJSkSMCw1q7wijqbt2bl2DjWqyIDSjKmVr7m3a7Vn6jt+qMT5kf2uj0G/60ipywU8YAW5HDxeWdZRXraoFskGJGQ+QSC5R7HeXXVIpGBW42W9tNIlv/7N4NmCrwrDm0DN5HeFqjJyYcFHBvDorZEKcsnD1WSABCQDWMpLU91g+a3RcvKh8gdLdqLdV4+VNY5envCFjoy98IV/JAyqJ51croqS8n5XyQImAsYv/Tk0sqNz8dKPdi/ZtL3tjd9fPs+O/jE2cL17weC3Sw4e33nyLU/Np+f41al9oyWpd/aO+B77q+6TGrqh4uszQ0fPd35GHbhWFdpF7AhvO3N62XDdxSvJlq9+wV5/D9SPa/u2p/bMO/Pjlp+W35hY+ciu+cPV0VPj310/9u7+A7XPdJT+EPv81z1nW0bHBsiO+U+FtiS/X5Sq2Y83xysOR6ODe33Xmlcuu3EJvfLBiJg8eOolc/DqhbXvv9m7etzsPC00Hj02OiTWTCx8+9nT60/ATcnRbRdo8gFA04cub5/Ye+LQivYW88ML617b5x9kh47PP3z1UEfky5MXx2qXvrj5VfXc85nfcvL9Dfr7GjHvEQAA';
     dio.options.headers = {'Authorization' : authToken};
     try {
       final Response response = await dio.get<void>(_buildItemURL(itemId));
       print(response);
+      final jsonResult = json.decode(response.toString());
+      parsedJson = response.toString();
+//        info = Info.fromJson(jsonResult);
+//        print('Title: ' + info.title);
+      return Info.fromJson(jsonResult);
     }
     catch (e) {
       print(e);
@@ -191,4 +241,30 @@ class DetailedItem extends StatefulWidget {
 
   @override
   DetailedItemState createState() => DetailedItemState(itemId);
+}
+
+class Info {
+  String itemId;
+  String title;
+  String subtitle;
+
+  Info({
+    this.itemId,
+    this.title,
+    this.subtitle,
+  });
+
+  factory Info.fromJson(Map<String, dynamic> parsedJson) {
+    return Info(
+      itemId: parsedJson['itemId'],
+      title: parsedJson['title'],
+      subtitle: parsedJson['subtitle']
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'itemId': itemId,
+    'title': title,
+    'subtitle': subtitle,
+  };
 }
