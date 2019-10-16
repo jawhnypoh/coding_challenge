@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:coding_challenge/models/info_model.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -37,20 +38,7 @@ class EbaySearchState extends State<EbaySearch> {
   Widget _appTitle = Text('eBay Search App');
   Icon _queryIcon = Icon(Icons.search);
 
-  EbaySearchState() {
-//    _query.addListener(() {
-//      if(_query.text.isEmpty) {
-//        setState(() {
-//          _queryText = '';
-//        });
-//      }
-//      else {
-//        setState(() {
-//          _queryText = _query.text;
-//        });
-//      }
-//    });
-  }
+  EbaySearchState() {}
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,19 +141,13 @@ class DetailedItemState extends State<DetailedItem> {
       appBar: AppBar(
         title: Text('Item Details'),
       ),
-      body: createInfoItem(),
-    );
-  }
-
-  Widget createInfoItem() {
-    return Scaffold(
-        body: Container(
-          margin: const EdgeInsets.all(10.0),
-          child: FutureBuilder<Info>(
-              future: _getItemResults(itemId),
-              builder: (context, snapshot) {
-                if(snapshot.hasData) {
-                  return Container(
+      body: Container(
+        margin: const EdgeInsets.all(10.0),
+        child: FutureBuilder<Info>(
+            future: _getItemResults(itemId),
+            builder: (context, snapshot) {
+              if(snapshot.hasData) {
+                return Container(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
@@ -173,10 +155,6 @@ class DetailedItemState extends State<DetailedItem> {
 //                          child: Image.network(snapshot.data.image.imageUrl),
                         ),
                         Text(snapshot.data.title, style: TextStyle(fontSize: 20.0)),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Text(snapshot.data.subtitle, style: TextStyle(fontSize: 15.0)),
-                        ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                           child: Text('Sold By: ' + snapshot.data.seller.username),
@@ -188,15 +166,17 @@ class DetailedItemState extends State<DetailedItem> {
                         Text('Description: ' + snapshot.data.description),
                       ],
                     )
-                  );
-                }
-                else {
-                  return Text("${snapshot.error}");
-                }
-                return CircularProgressIndicator();
+                );
               }
-          ),
+              else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
         ),
+      ),
     );
   }
 
@@ -216,8 +196,6 @@ class DetailedItemState extends State<DetailedItem> {
       print(response);
       final jsonResult = json.decode(response.toString());
       parsedJson = response.toString();
-//        info = Info.fromJson(jsonResult);
-//        print('Title: ' + info.title);
       return Info.fromJson(jsonResult);
     }
     catch (e) {
@@ -240,96 +218,4 @@ class DetailedItem extends StatefulWidget {
 
   @override
   DetailedItemState createState() => DetailedItemState(itemId);
-}
-
-class Info {
-  String itemId;
-  String title;
-  String subtitle;
-  String description;
-  Image image;
-  Seller seller;
-  Price price;
-
-  Info({
-    this.itemId,
-    this.title,
-    this.subtitle,
-    this.description,
-    this.image,
-    this.seller,
-    this.price,
-  });
-
-  factory Info.fromJson(Map<String, dynamic> parsedJson) => Info(
-    itemId: parsedJson['itemId'],
-    title: parsedJson['title'],
-    subtitle: parsedJson['subtitle'],
-    description: parsedJson['shortDescription'],
-    image: Image.fromJson(parsedJson['image']),
-    seller: Seller.fromJson(parsedJson['seller']),
-    price: Price.fromJson(parsedJson['price']),
-  );
-
-  Map<String, dynamic> toJson() => {
-    'itemId': itemId,
-    'title': title,
-    'subtitle': subtitle,
-    'shortDescription': description,
-    'image': image.toJson(),
-    'seller': seller.toJson(),
-    'price': price.toJson(),
-  };
-}
-
-class Image {
-  String imageUrl;
-
-  Image({
-    this.imageUrl,
-  });
-
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
-    imageUrl: json['imageUrl'],
-  );
-
-  Map<String, dynamic> toJson() => {
-    'imageUrl': imageUrl,
-  };
-}
-
-class Seller {
-  String username;
-
-  Seller({
-    this.username,
-  });
-
-  factory Seller.fromJson(Map<String, dynamic> json) => Seller(
-    username: json['username'],
-  );
-
-  Map<String, dynamic> toJson() => {
-    'username': username,
-  };
-}
-
-class Price {
-  String value;
-  String currency;
-
-  Price({
-    this.value,
-    this.currency,
-  });
-
-  factory Price.fromJson(Map<String, dynamic> json) => Price(
-    value: json["value"],
-    currency: json["currency"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "value": value,
-    "currency": currency,
-  };
 }
