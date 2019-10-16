@@ -151,17 +151,24 @@ class DetailedItemState extends State<DetailedItem> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-//                          child: Image.network(snapshot.data.image.imageUrl),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 15.0),
+                          child: Container(
+                            child: Image.network(snapshot.data.itemImage.imageUrl, width: double.infinity, height: 300.0),
+                          ),
                         ),
                         Text(snapshot.data.title, style: TextStyle(fontSize: 20.0)),
                         Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Text('Condition: ' + snapshot.data.condition, style: TextStyle(fontSize: 17.0),),
+                        ),
+                        Padding(
                           padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                          child: Text('Sold By: ' + snapshot.data.seller.username),
+                          child: Text('US \$' + snapshot.data.price.value, style: TextStyle(fontSize: 30.0)),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Text('US \$' + snapshot.data.price.value, style: TextStyle(fontSize: 25.0)),
+                          child: Text('Sold By: ' + snapshot.data.seller.username),
                         ),
                         Text('Description: ' + snapshot.data.description),
                       ],

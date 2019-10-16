@@ -1,18 +1,18 @@
 class Info {
   String itemId;
   String title;
-  String subtitle;
+  String condition;
   String description;
-  Image image;
+  ItemImage itemImage;
   Seller seller;
   Price price;
 
   Info({
     this.itemId,
     this.title,
-    this.subtitle,
+    this.condition,
     this.description,
-    this.image,
+    this.itemImage,
     this.seller,
     this.price,
   });
@@ -20,9 +20,9 @@ class Info {
   factory Info.fromJson(Map<String, dynamic> parsedJson) => Info(
     itemId: parsedJson['itemId'],
     title: parsedJson['title'],
-    subtitle: parsedJson['subtitle'],
+    condition: parsedJson['condition'],
     description: parsedJson['shortDescription'],
-    image: Image.fromJson(parsedJson['image']),
+    itemImage: ItemImage.fromJson(parsedJson['image']),
     seller: Seller.fromJson(parsedJson['seller']),
     price: Price.fromJson(parsedJson['price']),
   );
@@ -30,22 +30,22 @@ class Info {
   Map<String, dynamic> toJson() => {
     'itemId': itemId,
     'title': title,
-    'subtitle': subtitle,
+    'condition': condition,
     'shortDescription': description,
-    'image': image.toJson(),
+    'itemImage': itemImage.toJson(),
     'seller': seller.toJson(),
     'price': price.toJson(),
   };
 }
 
-class Image {
+class ItemImage {
   String imageUrl;
 
-  Image({
+  ItemImage({
     this.imageUrl,
   });
 
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory ItemImage.fromJson(Map<String, dynamic> json) => ItemImage(
     imageUrl: json['imageUrl'],
   );
 
