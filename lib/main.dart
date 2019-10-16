@@ -113,7 +113,7 @@ class EbaySearchState extends State<EbaySearch> {
 
   // Get results from eBay API with query text
   void _getQueryResults(String _queryText) async {
-    final String authToken = 'Bearer v^1.1#i^1#I^3#f^0#p^1#r^0#t^H4sIAAAAAAAAAOVYb2wTZRhf9w8GDAwxukyD9ZAPOO/63l17115oSdeObDC2sm5zLCK5P2/Xs+3d5d47Rk3UZcIGxIjRkIyIyYhoogYBE0P84BfEmUwElJAJHzRRSVSUOBZDCBC9u5bRTTKQNbjEfmnueZ/3eX/P7/c87/vegb7KqicHGgeuVLvmlQ73gb5Sl4tcCKoqK+oWl5XWVpSAAgfXcN8TfeX9ZT+vQnwmrXFtEGmqgqB7ayatIM4xBjFTVziVRzLiFD4DEWeIXDy8vpmjCMBpumqooprG3E3RIOb3kRSg/CItCBQQJcuo3AzZrgYxHw+9/gRFBfws6w/wjDWOkAmbFGTwihHEKEAGcBLgJNMOWI7ycjRFsBTTjbk7oY5kVbFcCICFHLScM1cvgDozUh4hqBtWECzUFF4Tbw03RRta2ld5CmKF8jTEDd4w0dSniCpBdyefNuHMyyDHm4uboggRwjyh3ApTg3Lhm2DuAb7DNG2xCKEfsMAb8PsYtihUrlH1DG/MjMO2yBKecFw5qBiykb0ToxYbwnNQNPJPLVaIpqjb/ttg8mk5IUM9iDXUhzeGYzEstFZNKko2puIW5bLSE0nisbYoTgs0mSCBV8Ih46X9CUnML5SLlqd52koRVZFkmzTkblGNemihhtO5IQu4sZxalVY9nDBsRIV+gZsckr5uW9SciqaRVGxdYcYiwu083lmBydmGocuCacDJCNMHHIqCGK9psoRNH3RqMV8+W1EQSxqGxnk8vb29RC9NqHqPhwKA9HStb46LSZjhMdvX7nXHX77zBFx2UhGhNRPJnJHVLCxbrVq1ACg9WMgLSJb253mfCis03foPQ0HOnqkdUawO8Qoi6RUYryQmKEaCVDE6JJQvUo+NAwp8Fs/wegoaWpoXIS5adWZmoC5LHO1LUFaRQlxiAgncG0gkcMEnMTiZgBBAKAhiwP9/apS7LfU4FHVoFKfWi1Xnsaycgg1dXb2+ukYm1hDe+DRbLyWU7nhdZF1HW6Chq5vxC/Ub0Dq2J3i33XD75EVVgzE1LYvZYjBg93rxWKB1KcbrRjYO02nLMKtEkZ3o3BLZno+sALwmE3ZjE6Ka8ai8taPbps0O4lnlHNa0pkzGNHghDZuKtJv/Nzv5bdOTrbvOnMrJ0i8npCzlLimEoyaBtoiEDpFq6tb9jGi1z+x2NQUVawc0dDWdhnonOWuh77u+uXN9Jj7+5WFxb7kX8aYyh2pbTMtWCW2ea5ndF0Vlfo6dxqSPJSkSMCw1q7wijqbt2bl2DjWqyIDSjKmVr7m3a7Vn6jt+qMT5kf2uj0G/60ipywU8YAW5HDxeWdZRXraoFskGJGQ+QSC5R7HeXXVIpGBW42W9tNIlv/7N4NmCrwrDm0DN5HeFqjJyYcFHBvDorZEKcsnD1WSABCQDWMpLU91g+a3RcvKh8gdLdqLdV4+VNY5envCFjoy98IV/JAyqJ51croqS8n5XyQImAsYv/Tk0sqNz8dKPdi/ZtL3tjd9fPs+O/jE2cL17weC3Sw4e33nyLU/Np+f41al9oyWpd/aO+B77q+6TGrqh4uszQ0fPd35GHbhWFdpF7AhvO3N62XDdxSvJlq9+wV5/D9SPa/u2p/bMO/Pjlp+W35hY+ciu+cPV0VPj310/9u7+A7XPdJT+EPv81z1nW0bHBsiO+U+FtiS/X5Sq2Y83xysOR6ODe33Xmlcuu3EJvfLBiJg8eOolc/DqhbXvv9m7etzsPC00Hj02OiTWTCx8+9nT60/ATcnRbRdo8gFA04cub5/Ye+LQivYW88ML617b5x9kh47PP3z1UEfky5MXx2qXvrj5VfXc85nfcvL9Dfr7GjHvEQAA';
+    final String authToken = ('Bearer v^1.1#i^1#I^3#r^0#f^0#p^1#t^H4sIAAAAAAAAAOVYbWwTZRxv124wXmYcBAkRUm5ojEuvz7W9rr3Qmu4NOl7arYOWGZj38tx67Hp33HOlK0RTRzK+4SsCH0xGgvGNJWIUTcRANAIxIkIkEE2GiUMxwgc+KBrD8O5aRjfJQNbgEvuluef5P//n9//9/v/nDeSrqp8cWDlwfa51RsVgHuQrrFZiNqiuqqyvsVUsqrSAEgPrYH5Z3t5vu7wc0WlRoTogUmQJQUdfWpQQZTYGsYwqUTKNBERJdBoiSmOpeHjNasqNA0pRZU1mZRFzRJqDGBdo4CBJQgZ4GxjI+/RW6ZbPTjmIMTxJ+hjWH6ADnI/zA70foQyMSEijJS2IuQERcBLASfg63QTlJim3B/d6yS7MsR6qSJAl3QQHWMiES5lj1RKsk0OlEYKqpjvBQpFwazwajjS3rO1c7irxFSryENdoLYPGfzXJHHSsp8UMnHwaZFpT8QzLQoQwV6gww3inVPgWmPuAb1Lt4xlANxBu0k8yRMDDl4XKVllN09rkOIwWgXPypikFJU3QcndjVGeD2QxZrfi1VncRaXYYf+0ZWhR4AapBrKUxvCEci2GhNjklSbmY7NQpF6SeppQz1tHs9DAegieAl3NCn9fj5zm2OFHBW5HmCTM1yRInGKQhx1pZa4Q6ajiRG6KEG90oKkXVMK8ZiErtPGMcgi5D1IKKGS0lGbrCtE6Ew/y8uwJjozVNFZiMBsc8TOwwKQpitKIIHDax08zFYvr0oSCW0jSFcrmy2Sye9eCy2uNyA0C4kmtWx9kUTNOYbmvUesFeuPsAp2CGwkJ9JBIoLafoWPr0XNUBSD1YyAuIBo+/yPt4WKGJrf9oKInZNb4iylUhAT/DcTQIBPwEIP1cOQokVMxRlwEDMnTOmabVXqgpIs1CJ6unWSYNVYGjPCTv1nMUOjlfgHd6AzzvZEjO5yR4CAGEDMMG/P+nOrnXTI9DVoVaWVK9bGkeywm9sCWZzJL1K32xlvCGREMjx0td8fqmVes6Ai3JLp+faWxHqxp6gvdaDHcOnpUVGJNFgc2VgwGj1svHgkflYrSq5eJQFPWGKQWKjECnl8jGeKQ7oBUBNwobZ+W0S6b1Bd1o6jYRTynmsKJE0umMRjMijJRnMf+PFvI7hifoR51pFZOuX0FIgSucUXBTTRxtZXEVIjmj6sczPGps2Z1yL5T0FVBTZVGE6npiykI/cH2NWp+cj3+5Wdxf7OU7qEyn3GZFQU+h7ukW2QNRVKCn2W5MkPqlx0cQbs+U4moyNe3MTbd9aKWMNMhNGpq99f5O1a7xd/yQxfwR/dYPQb/1UIXVClzgMaIOLK2yrbPb5ixCggZxgeZxJPRI+tVVhXgvzCm0oFZUWYWXz+48V/KqMLgRLBx7V6i2EbNLHhnAo7d7KomHHplLBAhA+Nz65dXt6QJ1t3vtxAL7fGl49S+LR/bP/NYSeO/ELHHxH2jO12DumJHVWmmx91stA/sSI+e3OxLd5IWnlfC5k6ElB/p2XFFe+XLep8/V71q1ZOMSat7AoXxk2Pb5F76j7zCS3O7akmnan/DXjiQP3FxQ+1PtzNk1r3V2WE5vOfHGw9//mVoxurdtztHTh3d/1y8d3Nu9mfztSPKv6icWWbemLMd/BG+PWpIL5ydGll0eXXY2ds12avDUC2999eLH3l1XX7qWj0V31mw7s0WpHRDP3Ih+03H8eu8no9mLp68mPpOeTTyv7ujefszf0frBm8M3N+85uXuPdmSGd9PQhV11Pyytu/TuYe7Uz7Mq3t9mr2pf0d12cNO+o/01rw89lRyy/HrpWPb36DMX8R3nK66cHBJeffwjIT98w2cvyPc354esQu8RAAA=');
     dio.options.headers = {'Authorization' : authToken};
     try {
       final Response response = await dio.get<void>(_buildQueryURL(_queryText));
@@ -153,23 +153,39 @@ class DetailedItemState extends State<DetailedItem> {
       appBar: AppBar(
         title: Text('Item Details'),
       ),
-      body: createItem(),
+      body: createInfoItem(),
     );
   }
 
-  Widget createItem() {
+  Widget createInfoItem() {
     return Scaffold(
-        body: Center(
+        body: Container(
+          margin: const EdgeInsets.all(10.0),
           child: FutureBuilder<Info>(
               future: _getItemResults(itemId),
               builder: (context, snapshot) {
                 if(snapshot.hasData) {
                   return Container(
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(snapshot.data.title),
-                        Text(snapshot.data.subtitle),
-                        Text(snapshot.data.itemId),
+                        Container(
+//                          child: Image.network(snapshot.data.image.imageUrl),
+                        ),
+                        Text(snapshot.data.title, style: TextStyle(fontSize: 20.0)),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Text(snapshot.data.subtitle, style: TextStyle(fontSize: 15.0)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                          child: Text('Sold By: ' + snapshot.data.seller.username),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Text('US \$' + snapshot.data.price.value, style: TextStyle(fontSize: 25.0)),
+                        ),
+                        Text('Description: ' + snapshot.data.description),
                       ],
                     )
                   );
@@ -184,23 +200,6 @@ class DetailedItemState extends State<DetailedItem> {
     );
   }
 
-//  Widget createItem() {
-//    return Scaffold(
-//        body: ListView(
-//          children: <Widget>[
-//            ListTile(
-//              contentPadding: EdgeInsets.all(10.0),
-//              title: Text('Title',
-//                style: TextStyle(
-//                    fontSize: 25.0),
-//              ),
-//          subtitle: Text(info.subtitle),
-//            )
-//          ],
-//        )
-//    );
-//  }
-
   // Build the item detailed URL based on itemID
   String _buildItemURL(String itemId) {
     final String _finalURL = _itemURL + itemId;
@@ -210,7 +209,7 @@ class DetailedItemState extends State<DetailedItem> {
 
   Future<Info> _getItemResults(String itemId) async {
     print('_getItemResults() called ');
-    final String authToken = 'Bearer v^1.1#i^1#I^3#f^0#p^1#r^0#t^H4sIAAAAAAAAAOVYb2wTZRhf9w8GDAwxukyD9ZAPOO/63l17115oSdeObDC2sm5zLCK5P2/Xs+3d5d47Rk3UZcIGxIjRkIyIyYhoogYBE0P84BfEmUwElJAJHzRRSVSUOBZDCBC9u5bRTTKQNbjEfmnueZ/3eX/P7/c87/vegb7KqicHGgeuVLvmlQ73gb5Sl4tcCKoqK+oWl5XWVpSAAgfXcN8TfeX9ZT+vQnwmrXFtEGmqgqB7ayatIM4xBjFTVziVRzLiFD4DEWeIXDy8vpmjCMBpumqooprG3E3RIOb3kRSg/CItCBQQJcuo3AzZrgYxHw+9/gRFBfws6w/wjDWOkAmbFGTwihHEKEAGcBLgJNMOWI7ycjRFsBTTjbk7oY5kVbFcCICFHLScM1cvgDozUh4hqBtWECzUFF4Tbw03RRta2ld5CmKF8jTEDd4w0dSniCpBdyefNuHMyyDHm4uboggRwjyh3ApTg3Lhm2DuAb7DNG2xCKEfsMAb8PsYtihUrlH1DG/MjMO2yBKecFw5qBiykb0ToxYbwnNQNPJPLVaIpqjb/ttg8mk5IUM9iDXUhzeGYzEstFZNKko2puIW5bLSE0nisbYoTgs0mSCBV8Ih46X9CUnML5SLlqd52koRVZFkmzTkblGNemihhtO5IQu4sZxalVY9nDBsRIV+gZsckr5uW9SciqaRVGxdYcYiwu083lmBydmGocuCacDJCNMHHIqCGK9psoRNH3RqMV8+W1EQSxqGxnk8vb29RC9NqHqPhwKA9HStb46LSZjhMdvX7nXHX77zBFx2UhGhNRPJnJHVLCxbrVq1ACg9WMgLSJb253mfCis03foPQ0HOnqkdUawO8Qoi6RUYryQmKEaCVDE6JJQvUo+NAwp8Fs/wegoaWpoXIS5adWZmoC5LHO1LUFaRQlxiAgncG0gkcMEnMTiZgBBAKAhiwP9/apS7LfU4FHVoFKfWi1Xnsaycgg1dXb2+ukYm1hDe+DRbLyWU7nhdZF1HW6Chq5vxC/Ub0Dq2J3i33XD75EVVgzE1LYvZYjBg93rxWKB1KcbrRjYO02nLMKtEkZ3o3BLZno+sALwmE3ZjE6Ka8ai8taPbps0O4lnlHNa0pkzGNHghDZuKtJv/Nzv5bdOTrbvOnMrJ0i8npCzlLimEoyaBtoiEDpFq6tb9jGi1z+x2NQUVawc0dDWdhnonOWuh77u+uXN9Jj7+5WFxb7kX8aYyh2pbTMtWCW2ea5ndF0Vlfo6dxqSPJSkSMCw1q7wijqbt2bl2DjWqyIDSjKmVr7m3a7Vn6jt+qMT5kf2uj0G/60ipywU8YAW5HDxeWdZRXraoFskGJGQ+QSC5R7HeXXVIpGBW42W9tNIlv/7N4NmCrwrDm0DN5HeFqjJyYcFHBvDorZEKcsnD1WSABCQDWMpLU91g+a3RcvKh8gdLdqLdV4+VNY5envCFjoy98IV/JAyqJ51croqS8n5XyQImAsYv/Tk0sqNz8dKPdi/ZtL3tjd9fPs+O/jE2cL17weC3Sw4e33nyLU/Np+f41al9oyWpd/aO+B77q+6TGrqh4uszQ0fPd35GHbhWFdpF7AhvO3N62XDdxSvJlq9+wV5/D9SPa/u2p/bMO/Pjlp+W35hY+ciu+cPV0VPj310/9u7+A7XPdJT+EPv81z1nW0bHBsiO+U+FtiS/X5Sq2Y83xysOR6ODe33Xmlcuu3EJvfLBiJg8eOolc/DqhbXvv9m7etzsPC00Hj02OiTWTCx8+9nT60/ATcnRbRdo8gFA04cub5/Ye+LQivYW88ML617b5x9kh47PP3z1UEfky5MXx2qXvrj5VfXc85nfcvL9Dfr7GjHvEQAA';
+    final String authToken = ('Bearer v^1.1#i^1#I^3#r^0#f^0#p^1#t^H4sIAAAAAAAAAOVYbWwTZRxv124wXmYcBAkRUm5ojEuvz7W9rr3Qmu4NOl7arYOWGZj38tx67Hp33HOlK0RTRzK+4SsCH0xGgvGNJWIUTcRANAIxIkIkEE2GiUMxwgc+KBrD8O5aRjfJQNbgEvuluef5P//n9//9/v/nDeSrqp8cWDlwfa51RsVgHuQrrFZiNqiuqqyvsVUsqrSAEgPrYH5Z3t5vu7wc0WlRoTogUmQJQUdfWpQQZTYGsYwqUTKNBERJdBoiSmOpeHjNasqNA0pRZU1mZRFzRJqDGBdo4CBJQgZ4GxjI+/RW6ZbPTjmIMTxJ+hjWH6ADnI/zA70foQyMSEijJS2IuQERcBLASfg63QTlJim3B/d6yS7MsR6qSJAl3QQHWMiES5lj1RKsk0OlEYKqpjvBQpFwazwajjS3rO1c7irxFSryENdoLYPGfzXJHHSsp8UMnHwaZFpT8QzLQoQwV6gww3inVPgWmPuAb1Lt4xlANxBu0k8yRMDDl4XKVllN09rkOIwWgXPypikFJU3QcndjVGeD2QxZrfi1VncRaXYYf+0ZWhR4AapBrKUxvCEci2GhNjklSbmY7NQpF6SeppQz1tHs9DAegieAl3NCn9fj5zm2OFHBW5HmCTM1yRInGKQhx1pZa4Q6ajiRG6KEG90oKkXVMK8ZiErtPGMcgi5D1IKKGS0lGbrCtE6Ew/y8uwJjozVNFZiMBsc8TOwwKQpitKIIHDax08zFYvr0oSCW0jSFcrmy2Sye9eCy2uNyA0C4kmtWx9kUTNOYbmvUesFeuPsAp2CGwkJ9JBIoLafoWPr0XNUBSD1YyAuIBo+/yPt4WKGJrf9oKInZNb4iylUhAT/DcTQIBPwEIP1cOQokVMxRlwEDMnTOmabVXqgpIs1CJ6unWSYNVYGjPCTv1nMUOjlfgHd6AzzvZEjO5yR4CAGEDMMG/P+nOrnXTI9DVoVaWVK9bGkeywm9sCWZzJL1K32xlvCGREMjx0td8fqmVes6Ai3JLp+faWxHqxp6gvdaDHcOnpUVGJNFgc2VgwGj1svHgkflYrSq5eJQFPWGKQWKjECnl8jGeKQ7oBUBNwobZ+W0S6b1Bd1o6jYRTynmsKJE0umMRjMijJRnMf+PFvI7hifoR51pFZOuX0FIgSucUXBTTRxtZXEVIjmj6sczPGps2Z1yL5T0FVBTZVGE6npiykI/cH2NWp+cj3+5Wdxf7OU7qEyn3GZFQU+h7ukW2QNRVKCn2W5MkPqlx0cQbs+U4moyNe3MTbd9aKWMNMhNGpq99f5O1a7xd/yQxfwR/dYPQb/1UIXVClzgMaIOLK2yrbPb5ixCggZxgeZxJPRI+tVVhXgvzCm0oFZUWYWXz+48V/KqMLgRLBx7V6i2EbNLHhnAo7d7KomHHplLBAhA+Nz65dXt6QJ1t3vtxAL7fGl49S+LR/bP/NYSeO/ELHHxH2jO12DumJHVWmmx91stA/sSI+e3OxLd5IWnlfC5k6ElB/p2XFFe+XLep8/V71q1ZOMSat7AoXxk2Pb5F76j7zCS3O7akmnan/DXjiQP3FxQ+1PtzNk1r3V2WE5vOfHGw9//mVoxurdtztHTh3d/1y8d3Nu9mfztSPKv6icWWbemLMd/BG+PWpIL5ydGll0eXXY2ds12avDUC2999eLH3l1XX7qWj0V31mw7s0WpHRDP3Ih+03H8eu8no9mLp68mPpOeTTyv7ujefszf0frBm8M3N+85uXuPdmSGd9PQhV11Pyytu/TuYe7Uz7Mq3t9mr2pf0d12cNO+o/01rw89lRyy/HrpWPb36DMX8R3nK66cHBJeffwjIT98w2cvyPc354esQu8RAAA=');
     dio.options.headers = {'Authorization' : authToken};
     try {
       final Response response = await dio.get<void>(_buildItemURL(itemId));
@@ -247,24 +246,90 @@ class Info {
   String itemId;
   String title;
   String subtitle;
+  String description;
+  Image image;
+  Seller seller;
+  Price price;
 
   Info({
     this.itemId,
     this.title,
     this.subtitle,
+    this.description,
+    this.image,
+    this.seller,
+    this.price,
   });
 
-  factory Info.fromJson(Map<String, dynamic> parsedJson) {
-    return Info(
-      itemId: parsedJson['itemId'],
-      title: parsedJson['title'],
-      subtitle: parsedJson['subtitle']
-    );
-  }
+  factory Info.fromJson(Map<String, dynamic> parsedJson) => Info(
+    itemId: parsedJson['itemId'],
+    title: parsedJson['title'],
+    subtitle: parsedJson['subtitle'],
+    description: parsedJson['shortDescription'],
+    image: Image.fromJson(parsedJson['image']),
+    seller: Seller.fromJson(parsedJson['seller']),
+    price: Price.fromJson(parsedJson['price']),
+  );
 
   Map<String, dynamic> toJson() => {
     'itemId': itemId,
     'title': title,
     'subtitle': subtitle,
+    'shortDescription': description,
+    'image': image.toJson(),
+    'seller': seller.toJson(),
+    'price': price.toJson(),
+  };
+}
+
+class Image {
+  String imageUrl;
+
+  Image({
+    this.imageUrl,
+  });
+
+  factory Image.fromJson(Map<String, dynamic> json) => Image(
+    imageUrl: json['imageUrl'],
+  );
+
+  Map<String, dynamic> toJson() => {
+    'imageUrl': imageUrl,
+  };
+}
+
+class Seller {
+  String username;
+
+  Seller({
+    this.username,
+  });
+
+  factory Seller.fromJson(Map<String, dynamic> json) => Seller(
+    username: json['username'],
+  );
+
+  Map<String, dynamic> toJson() => {
+    'username': username,
+  };
+}
+
+class Price {
+  String value;
+  String currency;
+
+  Price({
+    this.value,
+    this.currency,
+  });
+
+  factory Price.fromJson(Map<String, dynamic> json) => Price(
+    value: json["value"],
+    currency: json["currency"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "value": value,
+    "currency": currency,
   };
 }
