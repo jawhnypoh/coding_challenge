@@ -33,24 +33,23 @@ class EbaySearchState extends State<EbaySearch> {
   final TextEditingController _query = TextEditingController();
   var dio = Dio();
   List items = List();
-  String _queryText = '';
   String _queryURL = 'https://api.ebay.com/buy/browse/v1/item_summary/search?';
   Widget _appTitle = Text('eBay Search App');
   Icon _queryIcon = Icon(Icons.search);
 
   EbaySearchState() {
-    _query.addListener(() {
-      if(_query.text.isEmpty) {
-        setState(() {
-          _queryText = '';
-        });
-      }
-      else {
-        setState(() {
-          _queryText = _query.text;
-        });
-      }
-    });
+//    _query.addListener(() {
+//      if(_query.text.isEmpty) {
+//        setState(() {
+//          _queryText = '';
+//        });
+//      }
+//      else {
+//        setState(() {
+//          _queryText = _query.text;
+//        });
+//      }
+//    });
   }
 
   Widget build(BuildContext context) {
@@ -66,18 +65,21 @@ class EbaySearchState extends State<EbaySearch> {
   Widget _buildAppBar(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: _appTitle,
-      leading: IconButton(icon: _queryIcon, onPressed: _queryPressed),
-    );
-  }
-
-  Widget _buildLoadingScreen() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [Text('Loading Results...'),
-        CircularProgressIndicator()],
-      )
+      leading: _queryIcon,
+      title: TextField(
+        controller: _query,
+        decoration: InputDecoration(
+          hintText: 'Search for anything...',
+          hintStyle: TextStyle(color: Colors.white),
+        ),
+        onSubmitted: (_queryText) {
+          if(_queryText.isNotEmpty) {
+            _getQueryResults(_queryText);
+          }
+        },
+        style: TextStyle(
+            color: Colors.white),
+      ),
     );
   }
 
@@ -91,7 +93,7 @@ class EbaySearchState extends State<EbaySearch> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => DetailedItem()),
+              MaterialPageRoute(builder: (context) => DetailedItem(itemId: items[idx]['itemId'])),
             );
           },
         );
@@ -102,44 +104,25 @@ class EbaySearchState extends State<EbaySearch> {
     );
   }
 
-  // If query button is pressed, change the state to allow user to search
-  void _queryPressed() {
-    setState(() {
-      if(_queryIcon.icon == Icons.search) {
-        _queryIcon = Icon(Icons.close);
-        _appTitle = TextField(
-          controller: _query,
-          decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search),
-            hintText: 'Search for stuff...',
-            hintStyle: TextStyle(color: Colors.white),
-          ),
-        );
-
-      }
-      // Otherwise, revert to default AppBar state
-      else {
-        _queryIcon = Icon(Icons.search);
-        _appTitle = Text('eBay Search App');
-      }
-      print('_queryText is: ' + _queryText);
-      _getQueryResults();
-    });
-  }
-
   // Build the query URL based on what user entered
-  String _buildQueryURL() {
+  String _buildQueryURL(String _queryText) {
+    print('_buildQueryURL _queryText: ' + _queryText);
     final String _finalURL = _queryURL + 'q=' + _queryText + '&limit=100';
     print('finalURL is: ' + _finalURL);
     return _finalURL;
   }
 
-  void _getQueryResults() async {
-    final String authToken = 'Bearer v^1.1#i^1#p^1#f^0#I^3#r^0#t^H4sIAAAAAAAAAOVYa2wUVRTuttvKq/hDESQI7YAPKDt778w+B3bJ9kF3KaVLt61tkcDszJ3t0NmZde5dyxqF2pCCRIOKYkSMNSbERE3kB4YY/UF8EYIGiQI/IPFBkKCQQAwai4+Z2aVsK2mRbrCJ+2cz55577ne+75x77wzoLZu8qD/c/2u57Y7igV7QW2yzwalgcllp1fSS4tmlRSDPwTbQu6DX3ldybinmk0qKa0Y4pakYVWxMKirmLGOASusqp/FYxpzKJxHmiMDFQo0rOYYGXErXiCZoClURqQ1QiOG9rAu5vR5/nHUz0LCq12K2aAHK5eOZuMj6xDgLBL/bY4xjnEYRFRNeJQGKAdDvgMAB3S3AwzGQYxgaukAnVdGGdCxrquFCAypoweWsuXoe1tGh8hgjnRhBqGAktDzWFIrU1q1qWerMixXM8RAjPEnj4U81mogq2ngljUZfBlveXCwtCAhjyhnMrjA8KBe6BuYW4FtUs8Dv90sAsW6fX3AxTEGoXK7pSZ6MjsO0yKJDslw5pBKZZMZi1GAjvgEJJPe0yggRqa0w/1aneUWWZKQHqLrqUEcoGqWCK7QuVc1ENYdBuawmaroc0eZaBxtnoQSBS3Qgj4v1SaKQWygbLUfziJVqNFWUTdJwxSqNVCMDNRrJDczjxnBqUpv0kERMRPl+vmscsu5OU9SsimnSpZq6oqRBRIX1OLYCQ7MJ0eV4mqChCCMHLIoCFJ9KySI1ctCqxVz5bMQBqouQFOd09vT00D0srekJJwMAdLY3rowJXSjJU4av2etZf3nsCQ7ZSkVAxkwscySTMrBsNGrVAKAmqKALQC/ry/E+HFZwpPUfhrycncM7olAdgpAgAEFwAyhKcUmSCtEhwVyROk0cKM5nHEle70YkpfACcghGnaWTSJdFjnVLjFGkyCF6/JLD5ZckR9wtehxQQgggFI8Lft//qVFuttRjSNARKUitF6zOoxm5G9W1t/e4q8KeaF2o42FvtSipnbGqmobWZn9de6fHF69ejRu8icDNdsONkxe0FIpqiixkCsCA2esFZIHVxSivk0wMKYphGFei2Ex0YolszsdGAD4l02Zj04KWdGq8saObpnUW4nHlHEqlIslkmvBxBUUKs5v/Rzv5DdOTjbvOhMrJ0C8rpCxmLym0pSaNHxNoHWEtrRv3M7rJPLNbtG6kGjsg0TVFQXobHLfQt1tfs9fH4ONfHha3lnvhbioTqbYFRTZKaN1Ey+y2KCrzE+w0hm4vhAxw+Zhx5VVjadqSmWjnUFjDBImjpWavv8VrtXP4S36wyPrBPtt+0GfbV2yzASe4H84HlWUlrfaSabOxTBAt8xKN5YRqvLvqiO5GmRQv68VlNvmFY1u/yfusMLAWzBr6sDC5BE7N+8oA5lwfKYV3ziyHfgigG3gYyDCdYP71UTu8x3534s2qr7b/8WPjpfq9zeWXAh+07Tt7FZQPOdlspUX2PlvRzqPTFpxe8eGUU0+dvOvJiwtPbHuo6ruPScOa+vPqrleirS8lng/+VouKHnxbq1x3YWDLwdi3bw00KmdXvrF/e0fU/3r5lLWdl48d7/NSyrTKOacaznOfLTn6xPrBL+aeXf9o9Z6Xt7Ue7rrvyulNC36+KP/JHG677J7evfvcEpHOPLJmcE7VrMHKQ4kdx79/bm1o5+aDs8KfPrtLWD6vfdnjZ8LR9z+hIhceeHXhkb2LDvyyo37Pa6dp/O4z27Z/zk66Opied7Tu5AZ6Rsd7mxcy8MDuQfT7pBN7bB/V2ufva/8686K3tPrMpi//YgZObt4SePrKvYunHunf+9MP78xb1jy3f/GhXeEZM4+Ht87Fela+vwFxtakK8BEAAA==';
+  // Build the item detailed URL based on itemID
+  String _buildItemURL() {
+
+  }
+
+  // Get results from eBay API with query text
+  void _getQueryResults(String _queryText) async {
+    final String authToken = 'Bearer v^1.1#i^1#p^1#r^0#I^3#f^0#t^H4sIAAAAAAAAAOVYW2gUVxjObjZpxUZFRaPYuh0rKYadPWfvM7oLm5vZmsvqbtIY1DiXM9lJdmeWOWebbLE0Ro19aCuEgrGiCCkUKX3QeoM+1Jda9cHaQimpUhSh9AYFK7XgpZ2ZXeMmlcSaxQa6L8v85z//+f7v+/9zzgwYKJ+zZqhx6HaF5RnrkQEwYLVY4Fwwp7ysel6pdXlZCShwsBwZeGnANlj64zrMpZJpdhPCaVXByN6fSiqYNY1BKqMprMphGbMKl0KYJQIbCzc3sS4asGlNJaqgJil7pC5IQQ8PIHBJrgDyMAIPdKvyIGZcDVJ+BAS3i+NFABjeI4j6OMYZFFEw4RQSpFwAMg4IHNAXB4B1u1jgpf1e0EnZ25GGZVXRXWhAhUy4rDlXK8A6NVQOY6QRPQgVioQbYq3hSF19S3ydsyBWKM9DjHAkgyc+1aoisrdzyQyaehlserOxjCAgjClnKLfCxKBs+AGYJ4BvUu3nGBfyBSTGL0JRZ7MoVDaoWoojU+MwLLLokExXFilEJtnpGNXZ4HuQQPJPLXqISJ3d+NuY4ZKyJCMtSNXXhDeHo1Eq9IqaUJRsVHXolMtKd23CEd1U53DzbihB4BEdyOdxByRRyC+Ui5anedJKtaoiygZp2N6ikhqko0aTuXEVcKM7tSqtWlgiBqJCP9cDDj2eTkPUnIoZklAMXVFKJ8JuPk6vwPhsQjSZzxA0HmHygElRkOLSaVmkJg+atZgvn34cpBKEpFmns6+vj+5z06rW7XQBAJ0dzU0xIYFSHKX7Gr2e85enn+CQzVQEpM/EMkuyaR1Lv16rOgClmwp5APS7A3neJ8IKTbb+w1CQs3NiRxSrQ5AfQCi4OTeC0Md5uWJ0SChfpE4DB+K5rCPFab2IpJOcgByCXmeZFNJkkXV7JZdepMgh+hjJ4WEkycF7RZ8DSggBhHheYAL/p0Z53FKPIUFDpCi1XrQ6j2blXlTf0dHnrW70RevDm1/114iS0hmrrt3Qtomp7+j0BfiajXiDvzv4uN3w6OQFNY2ialIWskVgwOj1IrLg1sQop5FsDCWTumFGiWIj0dklsjEf6wG4tEwbjU0LasqpcvqObpi6TMQzyjmcTkdSqQzh+CSKFGc3/4928kemJ+t3nVmVk65fTkhZzF1SaFNNGr8m0BrCakbT72d0q3Fmx9VepOg7INHUZBJp7XDGQj9tfY1en4aPf3lYPFnuxbupzKbaFpKyXkJdsy2zp6KozM2y0xh6/RAGvIzLO6O8ak1N49nZdg41qpggcarUbOuf8FrtnPiSHyoxf3DQchIMWo5ZLRbgBKvhKvBieWmbrfS55VgmiJY5icZyt6K/u2qI7kXZNCdr1nKLPPz13m8KPisc2Qoqxz8szCmFcwu+MoAVD0fK4PylFZCBAPoAcLuAtxOsejhqg0tsi+1XW4ai23Y2nTu6rKr9rfekZ4e2fAIqxp0slrIS26ClhDn2/o3T+9dc/L7xfC35NjTv/raFP30Zd94cHW37dXjl2NzPhUXUrfWe148uraraSiLHL5y52jx8/t69tjp1d6Xnsu3gz6NdXR6pYQEWGr57Y2wkfmN0F1O59u7uM22LLyZ2jlyvTPyAr97sWrll++IDJ5rZ+ddbP/tr7O5vlzoGD+0Ff1y60gNG7n28urny1v5Fb795pXrhuoNnVsBTfnSK6e554dqyrw5du3z2wx0Vgzd/X/4nv+NOQ5O2dgSfGL5DLzxbdemjji9OVy3ped5y4eWjp603Vp7c8wtYffv4ucORQ0nuHXzgWuTAu3JneMHhD85bPQfBvl0X1+4hvbc+bd9/+f7Y9n1Mf2NOvr8BHf0NLfARAAA=';
     dio.options.headers = {'Authorization' : authToken};
-    // Get results from eBay API with query text
     try {
-      final Response response = await dio.get<void>(_buildQueryURL());
+      final Response response = await dio.get<void>(_buildQueryURL(_queryText));
       print(response);
 
       List resultsList = List();
@@ -156,7 +139,13 @@ class EbaySearchState extends State<EbaySearch> {
   }
 }
 
-class DetailedItemState extends State<DetailedItem> {
+class DetailedItem extends StatelessWidget {
+  // Declare itemId that holds itemId
+  final String itemId;
+
+  // Require an ItemId in the constructor
+  DetailedItem({Key key, @required this.itemId}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,7 +153,7 @@ class DetailedItemState extends State<DetailedItem> {
         title: Text('Item Details'),
       ),
       body: Center(
-        child: Text('Item Details Here'),
+        child: Text(itemId),
       ),
     );
   }
@@ -173,9 +162,4 @@ class DetailedItemState extends State<DetailedItem> {
 class EbaySearch extends StatefulWidget {
   @override
   EbaySearchState createState() => EbaySearchState();
-}
-
-class DetailedItem extends StatefulWidget {
-  @override
-  DetailedItemState createState() => DetailedItemState();
 }
