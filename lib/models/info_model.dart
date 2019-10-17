@@ -1,3 +1,4 @@
+// Overall Info Class
 class Info {
   String itemId;
   String title;
@@ -6,6 +7,7 @@ class Info {
   ItemImage itemImage;
   Seller seller;
   Price price;
+  List<ShippingOption> shippingOptions;
 
   Info({
     this.itemId,
@@ -15,6 +17,7 @@ class Info {
     this.itemImage,
     this.seller,
     this.price,
+    this.shippingOptions,
   });
 
   factory Info.fromJson(Map<String, dynamic> parsedJson) => Info(
@@ -25,6 +28,7 @@ class Info {
     itemImage: ItemImage.fromJson(parsedJson['image']),
     seller: Seller.fromJson(parsedJson['seller']),
     price: Price.fromJson(parsedJson['price']),
+    shippingOptions: List<ShippingOption>.from(parsedJson['shippingOptions'].map((x) => ShippingOption.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -35,9 +39,11 @@ class Info {
     'itemImage': itemImage.toJson(),
     'seller': seller.toJson(),
     'price': price.toJson(),
+    'shippingOptions': List<dynamic>.from(shippingOptions.map((x) => x.toJson())),
   };
 }
 
+// ItemImage class for image that loads at the top of the screen
 class ItemImage {
   String imageUrl;
 
@@ -45,8 +51,8 @@ class ItemImage {
     this.imageUrl,
   });
 
-  factory ItemImage.fromJson(Map<String, dynamic> json) => ItemImage(
-    imageUrl: json['imageUrl'],
+  factory ItemImage.fromJson(Map<String, dynamic> parsedJson) => ItemImage(
+    imageUrl: parsedJson['imageUrl'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -54,6 +60,7 @@ class ItemImage {
   };
 }
 
+// Seller class for Sold By:
 class Seller {
   String username;
 
@@ -70,6 +77,7 @@ class Seller {
   };
 }
 
+// Price class for determining the price
 class Price {
   String value;
   String currency;
@@ -79,13 +87,42 @@ class Price {
     this.currency,
   });
 
-  factory Price.fromJson(Map<String, dynamic> json) => Price(
-    value: json["value"],
-    currency: json["currency"],
+  factory Price.fromJson(Map<String, dynamic> parsedJson) => Price(
+    value: parsedJson['value'],
+    currency: parsedJson['currency'],
   );
 
   Map<String, dynamic> toJson() => {
-    "value": value,
-    "currency": currency,
+    'value': value,
+    'currency': currency,
+  };
+}
+
+// Shipping Options class for estimating shipping dates
+class ShippingOption {
+  Price shippingCost;
+  int quantityUsedForEstimate;
+  DateTime minEstimatedDeliveryDate;
+  DateTime maxEstimatedDeliveryDate;
+
+  ShippingOption({
+    this.shippingCost,
+    this.quantityUsedForEstimate,
+    this.minEstimatedDeliveryDate,
+    this.maxEstimatedDeliveryDate,
+  });
+
+  factory ShippingOption.fromJson(Map<String, dynamic> json) => ShippingOption(
+    shippingCost: Price.fromJson(json['shippingCost']),
+    quantityUsedForEstimate: json['quantityUsedForEstimate'],
+    minEstimatedDeliveryDate: DateTime.parse(json['minEstimatedDeliveryDate']),
+    maxEstimatedDeliveryDate: DateTime.parse(json['maxEstimatedDeliveryDate']),
+  );
+
+  Map<String, dynamic> toJson() => {
+    'shippingCost': shippingCost.toJson(),
+    'quantityUsedForEstimate': quantityUsedForEstimate,
+    'minEstimatedDeliveryDate': minEstimatedDeliveryDate.toIso8601String(),
+    'maxEstimatedDeliveryDate': maxEstimatedDeliveryDate.toIso8601String(),
   };
 }

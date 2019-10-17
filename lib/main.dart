@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:coding_challenge/models/info_model.dart';
+import 'package:intl/intl.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -76,8 +77,10 @@ class EbaySearchState extends State<EbaySearch> {
       itemCount: items == null ? 0 : items.length,
       itemBuilder: (BuildContext context, int idx) {
         return ListTile(
+          leading: Image.network(items[idx]['image']['imageUrl'],
+          width: 75.0, height: double.infinity),
           title: Text(items[idx]['title']),
-          subtitle: Text('\$' + items[idx]['price']['value']),
+          subtitle: Text('\$' + items[idx]['price']['value'], style: TextStyle(fontSize: 15.0),),
           onTap: () {
             Navigator.push(
               context,
@@ -101,7 +104,7 @@ class EbaySearchState extends State<EbaySearch> {
 
   // Get results from eBay API with query text
   void _getQueryResults(String _queryText) async {
-    final String authToken = ('Bearer v^1.1#i^1#I^3#r^0#f^0#p^1#t^H4sIAAAAAAAAAOVYbWwTZRxv124wXmYcBAkRUm5ojEuvz7W9rr3Qmu4NOl7arYOWGZj38tx67Hp33HOlK0RTRzK+4SsCH0xGgvGNJWIUTcRANAIxIkIkEE2GiUMxwgc+KBrD8O5aRjfJQNbgEvuluef5P//n9//9/v/nDeSrqp8cWDlwfa51RsVgHuQrrFZiNqiuqqyvsVUsqrSAEgPrYH5Z3t5vu7wc0WlRoTogUmQJQUdfWpQQZTYGsYwqUTKNBERJdBoiSmOpeHjNasqNA0pRZU1mZRFzRJqDGBdo4CBJQgZ4GxjI+/RW6ZbPTjmIMTxJ+hjWH6ADnI/zA70foQyMSEijJS2IuQERcBLASfg63QTlJim3B/d6yS7MsR6qSJAl3QQHWMiES5lj1RKsk0OlEYKqpjvBQpFwazwajjS3rO1c7irxFSryENdoLYPGfzXJHHSsp8UMnHwaZFpT8QzLQoQwV6gww3inVPgWmPuAb1Lt4xlANxBu0k8yRMDDl4XKVllN09rkOIwWgXPypikFJU3QcndjVGeD2QxZrfi1VncRaXYYf+0ZWhR4AapBrKUxvCEci2GhNjklSbmY7NQpF6SeppQz1tHs9DAegieAl3NCn9fj5zm2OFHBW5HmCTM1yRInGKQhx1pZa4Q6ajiRG6KEG90oKkXVMK8ZiErtPGMcgi5D1IKKGS0lGbrCtE6Ew/y8uwJjozVNFZiMBsc8TOwwKQpitKIIHDax08zFYvr0oSCW0jSFcrmy2Sye9eCy2uNyA0C4kmtWx9kUTNOYbmvUesFeuPsAp2CGwkJ9JBIoLafoWPr0XNUBSD1YyAuIBo+/yPt4WKGJrf9oKInZNb4iylUhAT/DcTQIBPwEIP1cOQokVMxRlwEDMnTOmabVXqgpIs1CJ6unWSYNVYGjPCTv1nMUOjlfgHd6AzzvZEjO5yR4CAGEDMMG/P+nOrnXTI9DVoVaWVK9bGkeywm9sCWZzJL1K32xlvCGREMjx0td8fqmVes6Ai3JLp+faWxHqxp6gvdaDHcOnpUVGJNFgc2VgwGj1svHgkflYrSq5eJQFPWGKQWKjECnl8jGeKQ7oBUBNwobZ+W0S6b1Bd1o6jYRTynmsKJE0umMRjMijJRnMf+PFvI7hifoR51pFZOuX0FIgSucUXBTTRxtZXEVIjmj6sczPGps2Z1yL5T0FVBTZVGE6npiykI/cH2NWp+cj3+5Wdxf7OU7qEyn3GZFQU+h7ukW2QNRVKCn2W5MkPqlx0cQbs+U4moyNe3MTbd9aKWMNMhNGpq99f5O1a7xd/yQxfwR/dYPQb/1UIXVClzgMaIOLK2yrbPb5ixCggZxgeZxJPRI+tVVhXgvzCm0oFZUWYWXz+48V/KqMLgRLBx7V6i2EbNLHhnAo7d7KomHHplLBAhA+Nz65dXt6QJ1t3vtxAL7fGl49S+LR/bP/NYSeO/ELHHxH2jO12DumJHVWmmx91stA/sSI+e3OxLd5IWnlfC5k6ElB/p2XFFe+XLep8/V71q1ZOMSat7AoXxk2Pb5F76j7zCS3O7akmnan/DXjiQP3FxQ+1PtzNk1r3V2WE5vOfHGw9//mVoxurdtztHTh3d/1y8d3Nu9mfztSPKv6icWWbemLMd/BG+PWpIL5ydGll0eXXY2ds12avDUC2999eLH3l1XX7qWj0V31mw7s0WpHRDP3Ih+03H8eu8no9mLp68mPpOeTTyv7ujefszf0frBm8M3N+85uXuPdmSGd9PQhV11Pyytu/TuYe7Uz7Mq3t9mr2pf0d12cNO+o/01rw89lRyy/HrpWPb36DMX8R3nK66cHBJeffwjIT98w2cvyPc354esQu8RAAA=');
+    final String authToken = 'Bearer v^1.1#i^1#r^0#p^1#I^3#f^0#t^H4sIAAAAAAAAAOVYa2wUVRTutttCedjEEBQkugyKSp3ZmZ3uYybsxm23lIU+tt0CZY3g3Zk77djZmWXurO3aALUJlaDyowQfFW01viUhGAnxETRNhPj4oaJgSFD5YSgiJqKJYBC9M7uUbSUt0g02cf9s5txzz/3O951z752hu0tKl/Qu7/19tm1a4WA33V1oszEz6dKS4vIbigrnFxfQOQ62we7bu+09RcNLEUgoSb4JoqSmIujoTCgq4i2jn0jpKq8BJCNeBQmIeEPgo8G6Wt5F0XxS1wxN0BTCEQ75CejlfBLtcgMvYL0QcNiqXorZrPkJNytxIi2wHGAAiEMBjyOUgmEVGUA1/ISLZjiSoUnG0+xieRfHs27K5XbFCMdqqCNZU7ELRRMBCy5vzdVzsI4PFSAEdQMHIQLh4LJoQzAcqq5vXurMiRXI8hA1gJFCo5+qNBE6VgMlBcdfBlnefDQlCBAhwhnIrDA6KB+8BOYa4FtUA1GUuLhP8AGfV/LEfXmhcpmmJ4AxPg7TIoukZLnyUDVkIz0Ro5iN+INQMLJP9ThEOOQw/xpTQJElGep+oroyuDYYiRCBFVqbqqYjGokpl9XWqjYy0hQi2TjLSAxdIZLQU8H6JFHILpSJlqV5zEpVmirKJmnIUa8ZlRCjhmO5YXK4wU4NaoMelAwT0Yift5lmLnHI+mKmqBkVU0abauoKE5gIh/U4sQIjsw1Dl+MpA45EGDtgUYS1TiZlkRg7aNVitnw6kZ9oM4wk73R2dHRQHSyl6a1OF00zzpa62qjQBhOAwL5mr2f85YknkLKVigDxTCTzRjqJsXTiWsUA1FYiUEEzXtaX5X00rMBY6z8MOTk7R3dE3jqEZqAgsCwjQljh8or56JBAtkidJg4YB2kyAfR2aCQVIEBSwHWWSkBdFnEsCVeKBEnRw0lkBSdJZNwtekhGgpCGMB4XON//qVGuttSjUNChkZdaz1udR9JyO6xuaelwly/3RKqDa9d4K0VJjUXLq1auauKqW2IeX7yyEa30tvqvthuunLygJWFEU2QhnQcGzF7PIwusLkaAbqSjUFGwYVKJIjPRqSWyOR/hACApU2ZjU4KWcGoA7+imab2FeFI5B5PJcCKRMkBcgeH87Ob/0U5+xfRkfNeZUjlh/TJCymLmkkJZalLoIYHSIdJSOr6fUQ3mmd2stUMV74CGrikK1Fczkxb6eutr9voEfPzLw+Lacs/fTWUq1bagyLiE1k+1zK6LojKYYqcx4/YyLo/P7XVPKq8qS9Pm9FQ7h5ZryIDieKnZa67xWu0c/ZIfKLB+TI9tH91j21tos9FO+g5mEb2wpGiVvWjWfCQbkJKBRCG5VcXvrjqk2mE6CWS9sMQm93356Nc5nxUG76dvHvmwUFrEzMz5ykAvuDxSzJTdNJvhGJrxuFgXx7pj9KLLo3Zmrn3On7Uv9m+/s/boA4duuWC/uLmR+mvDB/TsESebrbjA3mMrUE69fd/BgRP+U4tn/faUv2/GFzD2SqCv/YaP9j37SHfYe64/9NjS4U8Xv9yyZuCTH1ynbQt2nHrttu+nxZZNWyD3huwb+6M/DglNbOC9b87ufGfNvguBpl/9zq4j29b9sfKl6Z/vql4UO9+45au6p4fKu74r42ZsPfb+8f3zNjLVx7sOD/cOXFxycrt2ZsWu82VExd79j+9448SWMjH17txzc956eO2BrpOBrcUL66Z3Dt27+fVvfxL2CDM2fZjqJ35+/kbnkarF6wpffeHWu2tq7vpsd1/ppp2DBw7dM3R695PnNkyv37PnuWMXf9n2BHe2YUWrIAy3nd5/cF4vPX/g42CkY9Wbh7cfDYVqlkTPRJ/JyPc3aBJPYvARAAA=';
     dio.options.headers = {'Authorization' : authToken};
     try {
       final Response response = await dio.get<void>(_buildQueryURL(_queryText));
@@ -132,7 +135,7 @@ class DetailedItemState extends State<DetailedItem> {
   @override
   void initState() {
     super.initState();
-    this._getItemResults(itemId);
+    _getItemResults(itemId);
   }
 
   @override
@@ -151,16 +154,12 @@ class DetailedItemState extends State<DetailedItem> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
+                        Text(snapshot.data.title, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 15.0),
+                          padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
                           child: Container(
                             child: Image.network(snapshot.data.itemImage.imageUrl, width: double.infinity, height: 300.0),
                           ),
-                        ),
-                        Text(snapshot.data.title, style: TextStyle(fontSize: 20.0)),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Text('Condition: ' + snapshot.data.condition, style: TextStyle(fontSize: 17.0),),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -168,9 +167,17 @@ class DetailedItemState extends State<DetailedItem> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Text('Sold By: ' + snapshot.data.seller.username),
+                          child: Text('Sold By: ' + snapshot.data.seller.username, style: TextStyle(fontSize: 17.0),),
                         ),
-                        Text('Description: ' + snapshot.data.description),
+                        Text('Condition: ' + snapshot.data.condition, style: TextStyle(fontSize: 17.0)),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Text('Description: ' + snapshot.data.description, style: TextStyle(fontSize: 17.0)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15.0),
+                          child: Text('Est. Delivery ' + DateFormat('EEE, MMM d').format(snapshot.data.shippingOptions[0].minEstimatedDeliveryDate) + ' - ' + DateFormat('EEE, MMM d').format(snapshot.data.shippingOptions[0].maxEstimatedDeliveryDate)),
+                        ),
                       ],
                     )
                 );
@@ -196,7 +203,7 @@ class DetailedItemState extends State<DetailedItem> {
 
   Future<Info> _getItemResults(String itemId) async {
     print('_getItemResults() called ');
-    final String authToken = ('Bearer v^1.1#i^1#I^3#r^0#f^0#p^1#t^H4sIAAAAAAAAAOVYbWwTZRxv124wXmYcBAkRUm5ojEuvz7W9rr3Qmu4NOl7arYOWGZj38tx67Hp33HOlK0RTRzK+4SsCH0xGgvGNJWIUTcRANAIxIkIkEE2GiUMxwgc+KBrD8O5aRjfJQNbgEvuluef5P//n9//9/v/nDeSrqp8cWDlwfa51RsVgHuQrrFZiNqiuqqyvsVUsqrSAEgPrYH5Z3t5vu7wc0WlRoTogUmQJQUdfWpQQZTYGsYwqUTKNBERJdBoiSmOpeHjNasqNA0pRZU1mZRFzRJqDGBdo4CBJQgZ4GxjI+/RW6ZbPTjmIMTxJ+hjWH6ADnI/zA70foQyMSEijJS2IuQERcBLASfg63QTlJim3B/d6yS7MsR6qSJAl3QQHWMiES5lj1RKsk0OlEYKqpjvBQpFwazwajjS3rO1c7irxFSryENdoLYPGfzXJHHSsp8UMnHwaZFpT8QzLQoQwV6gww3inVPgWmPuAb1Lt4xlANxBu0k8yRMDDl4XKVllN09rkOIwWgXPypikFJU3QcndjVGeD2QxZrfi1VncRaXYYf+0ZWhR4AapBrKUxvCEci2GhNjklSbmY7NQpF6SeppQz1tHs9DAegieAl3NCn9fj5zm2OFHBW5HmCTM1yRInGKQhx1pZa4Q6ajiRG6KEG90oKkXVMK8ZiErtPGMcgi5D1IKKGS0lGbrCtE6Ew/y8uwJjozVNFZiMBsc8TOwwKQpitKIIHDax08zFYvr0oSCW0jSFcrmy2Sye9eCy2uNyA0C4kmtWx9kUTNOYbmvUesFeuPsAp2CGwkJ9JBIoLafoWPr0XNUBSD1YyAuIBo+/yPt4WKGJrf9oKInZNb4iylUhAT/DcTQIBPwEIP1cOQokVMxRlwEDMnTOmabVXqgpIs1CJ6unWSYNVYGjPCTv1nMUOjlfgHd6AzzvZEjO5yR4CAGEDMMG/P+nOrnXTI9DVoVaWVK9bGkeywm9sCWZzJL1K32xlvCGREMjx0td8fqmVes6Ai3JLp+faWxHqxp6gvdaDHcOnpUVGJNFgc2VgwGj1svHgkflYrSq5eJQFPWGKQWKjECnl8jGeKQ7oBUBNwobZ+W0S6b1Bd1o6jYRTynmsKJE0umMRjMijJRnMf+PFvI7hifoR51pFZOuX0FIgSucUXBTTRxtZXEVIjmj6sczPGps2Z1yL5T0FVBTZVGE6npiykI/cH2NWp+cj3+5Wdxf7OU7qEyn3GZFQU+h7ukW2QNRVKCn2W5MkPqlx0cQbs+U4moyNe3MTbd9aKWMNMhNGpq99f5O1a7xd/yQxfwR/dYPQb/1UIXVClzgMaIOLK2yrbPb5ixCggZxgeZxJPRI+tVVhXgvzCm0oFZUWYWXz+48V/KqMLgRLBx7V6i2EbNLHhnAo7d7KomHHplLBAhA+Nz65dXt6QJ1t3vtxAL7fGl49S+LR/bP/NYSeO/ELHHxH2jO12DumJHVWmmx91stA/sSI+e3OxLd5IWnlfC5k6ElB/p2XFFe+XLep8/V71q1ZOMSat7AoXxk2Pb5F76j7zCS3O7akmnan/DXjiQP3FxQ+1PtzNk1r3V2WE5vOfHGw9//mVoxurdtztHTh3d/1y8d3Nu9mfztSPKv6icWWbemLMd/BG+PWpIL5ydGll0eXXY2ds12avDUC2999eLH3l1XX7qWj0V31mw7s0WpHRDP3Ih+03H8eu8no9mLp68mPpOeTTyv7ujefszf0frBm8M3N+85uXuPdmSGd9PQhV11Pyytu/TuYe7Uz7Mq3t9mr2pf0d12cNO+o/01rw89lRyy/HrpWPb36DMX8R3nK66cHBJeffwjIT98w2cvyPc354esQu8RAAA=');
+    final String authToken = 'Bearer v^1.1#i^1#r^0#p^1#I^3#f^0#t^H4sIAAAAAAAAAOVYa2wUVRTutttCedjEEBQkugyKSp3ZmZ3uYybsxm23lIU+tt0CZY3g3Zk77djZmWXurO3aALUJlaDyowQfFW01viUhGAnxETRNhPj4oaJgSFD5YSgiJqKJYBC9M7uUbSUt0g02cf9s5txzz/3O951z752hu0tKl/Qu7/19tm1a4WA33V1oszEz6dKS4vIbigrnFxfQOQ62we7bu+09RcNLEUgoSb4JoqSmIujoTCgq4i2jn0jpKq8BJCNeBQmIeEPgo8G6Wt5F0XxS1wxN0BTCEQ75CejlfBLtcgMvYL0QcNiqXorZrPkJNytxIi2wHGAAiEMBjyOUgmEVGUA1/ISLZjiSoUnG0+xieRfHs27K5XbFCMdqqCNZU7ELRRMBCy5vzdVzsI4PFSAEdQMHIQLh4LJoQzAcqq5vXurMiRXI8hA1gJFCo5+qNBE6VgMlBcdfBlnefDQlCBAhwhnIrDA6KB+8BOYa4FtUA1GUuLhP8AGfV/LEfXmhcpmmJ4AxPg7TIoukZLnyUDVkIz0Ro5iN+INQMLJP9ThEOOQw/xpTQJElGep+oroyuDYYiRCBFVqbqqYjGokpl9XWqjYy0hQi2TjLSAxdIZLQU8H6JFHILpSJlqV5zEpVmirKJmnIUa8ZlRCjhmO5YXK4wU4NaoMelAwT0Yift5lmLnHI+mKmqBkVU0abauoKE5gIh/U4sQIjsw1Dl+MpA45EGDtgUYS1TiZlkRg7aNVitnw6kZ9oM4wk73R2dHRQHSyl6a1OF00zzpa62qjQBhOAwL5mr2f85YknkLKVigDxTCTzRjqJsXTiWsUA1FYiUEEzXtaX5X00rMBY6z8MOTk7R3dE3jqEZqAgsCwjQljh8or56JBAtkidJg4YB2kyAfR2aCQVIEBSwHWWSkBdFnEsCVeKBEnRw0lkBSdJZNwtekhGgpCGMB4XON//qVGuttSjUNChkZdaz1udR9JyO6xuaelwly/3RKqDa9d4K0VJjUXLq1auauKqW2IeX7yyEa30tvqvthuunLygJWFEU2QhnQcGzF7PIwusLkaAbqSjUFGwYVKJIjPRqSWyOR/hACApU2ZjU4KWcGoA7+imab2FeFI5B5PJcCKRMkBcgeH87Ob/0U5+xfRkfNeZUjlh/TJCymLmkkJZalLoIYHSIdJSOr6fUQ3mmd2stUMV74CGrikK1Fczkxb6eutr9voEfPzLw+Lacs/fTWUq1bagyLiE1k+1zK6LojKYYqcx4/YyLo/P7XVPKq8qS9Pm9FQ7h5ZryIDieKnZa67xWu0c/ZIfKLB+TI9tH91j21tos9FO+g5mEb2wpGiVvWjWfCQbkJKBRCG5VcXvrjqk2mE6CWS9sMQm93356Nc5nxUG76dvHvmwUFrEzMz5ykAvuDxSzJTdNJvhGJrxuFgXx7pj9KLLo3Zmrn3On7Uv9m+/s/boA4duuWC/uLmR+mvDB/TsESebrbjA3mMrUE69fd/BgRP+U4tn/faUv2/GFzD2SqCv/YaP9j37SHfYe64/9NjS4U8Xv9yyZuCTH1ynbQt2nHrttu+nxZZNWyD3huwb+6M/DglNbOC9b87ufGfNvguBpl/9zq4j29b9sfKl6Z/vql4UO9+45au6p4fKu74r42ZsPfb+8f3zNjLVx7sOD/cOXFxycrt2ZsWu82VExd79j+9448SWMjH17txzc956eO2BrpOBrcUL66Z3Dt27+fVvfxL2CDM2fZjqJ35+/kbnkarF6wpffeHWu2tq7vpsd1/ppp2DBw7dM3R695PnNkyv37PnuWMXf9n2BHe2YUWrIAy3nd5/cF4vPX/g42CkY9Wbh7cfDYVqlkTPRJ/JyPc3aBJPYvARAAA=';
     dio.options.headers = {'Authorization' : authToken};
     try {
       final Response response = await dio.get<void>(_buildItemURL(itemId));
