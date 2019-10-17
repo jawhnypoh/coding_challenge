@@ -38,10 +38,31 @@ class EbaySearchState extends State<EbaySearch> {
   var dio = Dio();
   List items = List();
   final String _queryURL = 'https://api.ebay.com/buy/browse/v1/item_summary/search?';
+  String authToken, nextURL;
   Widget _appTitle = Text('eBay Search App');
   Icon _queryIcon = Icon(Icons.search);
+  ScrollController _scrollControler = ScrollController();
+  bool isLoading = false;
 
   EbaySearchState() {}
+
+  @override
+  void initState() {
+//    _loadMoreData();
+    super.initState();
+    _scrollControler.addListener(() {
+      // If reach the bottom of ListView, call _loadMoreData()
+      if(_scrollControler.position.pixels == _scrollControler.position.maxScrollExtent) {
+        _loadMoreData();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollControler.dispose();
+    super.dispose();
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +81,7 @@ class EbaySearchState extends State<EbaySearch> {
       title: TextField(
         controller: _query,
         decoration: InputDecoration(
-          hintText: 'Search for anything...',
+          hintText: 'Tap here to search...',
           hintStyle: TextStyle(color: Colors.white),
         ),
         onSubmitted: (_queryText) {
@@ -74,26 +95,44 @@ class EbaySearchState extends State<EbaySearch> {
     );
   }
 
+  Widget _buildProgressIndicator() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Opacity(
+          opacity: isLoading ? 1.0 : 00,
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
+  }
+
   Widget _buildResultsList() {
     return ListView.separated(
-      itemCount: items == null ? 0 : items.length,
+      itemCount: items == null ? 0 : items.length + 1, // +1 to account for progress bar
       itemBuilder: (BuildContext context, int idx) {
-        return ListTile(
-          leading: Image.network(items[idx]['image']['imageUrl'],
-          width: 75.0, height: double.infinity),
-          title: Text(items[idx]['title']),
-          subtitle: Text('\$' + items[idx]['price']['value'], style: TextStyle(fontSize: 15.0),),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DetailedItem(itemId: items[idx]['itemId'])),
-            );
-          },
-        );
+        if(idx == items.length) {
+          return _buildProgressIndicator();
+        }
+        else {
+          return ListTile(
+            leading: Image.network(items[idx]['image']['imageUrl'],
+                width: 75.0, height: double.infinity),
+            title: Text(items[idx]['title']),
+            subtitle: Text('\$' + items[idx]['price']['value'], style: TextStyle(fontSize: 15.0),),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DetailedItem(itemId: items[idx]['itemId'])),
+              );
+            },
+          );
+        }
       },
       separatorBuilder: (context, index) {
         return Divider();
       },
+      controller: _scrollControler,
     );
   }
 
@@ -106,21 +145,40 @@ class EbaySearchState extends State<EbaySearch> {
   // Get results from eBay API with query text
   void _getQueryResults(String _queryText) async {
     String encoded = ClientAuth().generateEncodedCredentials();
-    String authToken = await ClientAuth().getAuthorizationToken(encoded);
+    authToken = await ClientAuth().getAuthorizationToken(encoded);
     dio.options.headers = {'Authorization' : authToken};
-    try {
-      final Response response = await dio.get<void>(_buildQueryURL(_queryText));
+
+    final Response response = await dio.get<void>(_buildQueryURL(_queryText));
+    print(response);
+    nextURL = response.data['next'];
+    List resultsList = List();
+    for(int i=0; i<response.data['itemSummaries'].length; i++) {
+      resultsList.add(response.data['itemSummaries'][i]);
+    }
+    setState(() {
+      items = resultsList;
+      isLoading = false;
+    });
+  }
+
+  void _loadMoreData() async {
+    print('_loadMoreData() called, isLoading is ' + isLoading.toString());
+    if(!isLoading) {
+      setState(() {
+        isLoading = true;
+      });
+      dio.options.headers = {'Authorization' : authToken};
+      final Response response = await dio.get(nextURL);
+      nextURL = response.data['next'];
       print(response);
       List resultsList = List();
       for(int i=0; i<response.data['itemSummaries'].length; i++) {
         resultsList.add(response.data['itemSummaries'][i]);
       }
       setState(() {
-        items = resultsList;
+        isLoading = false;
+        items.addAll(resultsList);
       });
-    }
-    catch (e) {
-      print(e);
     }
   }
 }
@@ -188,7 +246,10 @@ class DetailedItemState extends State<DetailedItem> {
                   return Text('${snapshot.error}');
                 }
                 return Center(
-                  child: CircularProgressIndicator(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
+                  ),
                 );
               }
           ),

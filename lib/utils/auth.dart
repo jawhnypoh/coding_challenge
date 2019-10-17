@@ -5,6 +5,7 @@ import 'dart:async';
 class ClientAuth {
   final dio = Dio();
 
+
   // Generate base64 encoded credentials from ClientID and ClientSecret
   String generateEncodedCredentials() {
     String credentials = identifier + ':' + secret;
