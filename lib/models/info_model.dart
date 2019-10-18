@@ -1,4 +1,4 @@
-// Overall Info Class
+// Overall Info Class for DetailedItem Screen
 class Info {
   String itemId;
   String title;

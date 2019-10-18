@@ -12,15 +12,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Coding Challenge',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: EbaySearch(),
@@ -34,7 +25,6 @@ class EbaySearchState extends State<EbaySearch> {
   List items = List();
   final String _queryURL = 'https://api.ebay.com/buy/browse/v1/item_summary/search?';
   String authToken, nextURL;
-  Widget _appTitle = Text('eBay Search App');
   Icon _queryIcon = Icon(Icons.search);
   ScrollController _scrollControler = ScrollController();
   bool isLoading = false;
@@ -142,20 +132,23 @@ class EbaySearchState extends State<EbaySearch> {
     authToken = await ClientAuth().getAuthorizationToken(encoded);
     dio.options.headers = {'Authorization' : authToken};
 
-    final Response response = await dio.get<void>(_buildQueryURL(_queryText));
-    print(response);
-    nextURL = response.data['next'];
-    List resultsList = List();
-    for(int i=0; i<response.data['itemSummaries'].length; i++) {
-      resultsList.add(response.data['itemSummaries'][i]);
+    try {
+      final Response response = await dio.get<void>(_buildQueryURL(_queryText));
+      print(response);
+      nextURL = response.data['next'];
+      final List resultsList = List();
+      for(int i=0; i<response.data['itemSummaries'].length; i++) {
+        resultsList.add(response.data['itemSummaries'][i]);
+      }
+      _scrollControler.animateTo(_scrollControler.position.minScrollExtent, duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
+
+      setState(() {
+        items = resultsList;
+        isLoading = false;
+      });
+    } catch (e) {
+      print(e);
     }
-
-    _scrollControler.animateTo(_scrollControler.position.minScrollExtent, duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
-
-    setState(() {
-      items = resultsList;
-      isLoading = false;
-    });
   }
 
   // Load more data from original API call's 'next' url
@@ -165,18 +158,23 @@ class EbaySearchState extends State<EbaySearch> {
       setState(() {
         isLoading = true;
       });
-      dio.options.headers = {'Authorization' : authToken};
-      final Response response = await dio.get(nextURL);
-      nextURL = response.data['next'];
-      print(response);
-      List resultsList = List();
-      for(int i=0; i<response.data['itemSummaries'].length; i++) {
-        resultsList.add(response.data['itemSummaries'][i]);
+
+      try {
+        dio.options.headers = {'Authorization' : authToken};
+        final Response response = await dio.get(nextURL);
+        nextURL = response.data['next'];
+        print(response);
+        final List resultsList = List();
+        for(int i=0; i<response.data['itemSummaries'].length; i++) {
+          resultsList.add(response.data['itemSummaries'][i]);
+        }
+        setState(() {
+          isLoading = false;
+          items.addAll(resultsList);
+        });
+      } catch (e) {
+        print(e);
       }
-      setState(() {
-        isLoading = false;
-        items.addAll(resultsList);
-      });
     }
   }
 }

@@ -67,7 +67,7 @@ class DetailedItemState extends State<DetailedItem> {
                             ),
                             Divider(color: Colors.grey),
                             Padding(
-                              padding: const EdgeInsets.only(top: 5.0, bottom: 10.0),
+                              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
                               child: Text('Item Description: ', style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
                             ),
                             Text(snapshot.data.description, style: TextStyle(fontSize: 15.0)),
