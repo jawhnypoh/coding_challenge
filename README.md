@@ -22,4 +22,4 @@ final String secret = '<YOUR-CLIENT-SECRET>'
 
 ## Bugs
 There may be some screens that appear to load indefinitely, or that are red and show error messages. This only happens on rare ocassions and is the result of the API returning null values. Widgets cannot display null values, and so we get an error. \
-The infinite loading bug is caused by the API returning null values for estimated shipping dates, and I'm not entirely sure which values return null from the API call when the red error screen appears. \
+The infinite loading bug is caused by the API returning null values for estimated shipping dates, and I couldn't figure out which values return null from the API call when the red error screen appears. 
