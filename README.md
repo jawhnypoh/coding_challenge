@@ -4,7 +4,7 @@ An eBay browsing application that allows the user to search for any item that's 
 ![eBay App Screenshots](https://i.imgur.com/V6u8RC5.png)
 
 ## Application Requirements
-- **Search:** Entering a keyword search on return a list of results pulled from the `api.ebay.com/buy/browse/v1/item_summary/` endpoint
+- **Search:** Entering a keyword to search will return a list of results pulled from the `api.ebay.com/buy/browse/v1/item_summary/` endpoint
 - **Infinite Scroll:** Reaching the end of the list (50 items by default from API) will generate another API call to load more results 
 - **Detail Item Screen:** Tapping an item in the list goes to another screen that pulls detailed information about specific item from the `api.ebay.com/buy/browse/v1/item/` endpoint
 
