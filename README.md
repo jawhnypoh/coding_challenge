@@ -14,7 +14,7 @@ An eBay browsing application that allows the user to search for any item that's 
 
 ## Instructions
 You will need to provie your own `client_ID` and `client_secret` in order for the app to generate the proper credentials for the OAuth2 Authorization that is needed to access the endpoints. 
-These variables are put in as Strings in the `ClientAuth` class:
+These variables are put in as Strings in the `ClientAuth` class that's found in `auth.dart`:
 ```dart
 final String identifier = '<YOUR-CLIENT-ID>'
 final String secret = '<YOUR-CLIENT-SECRET>'
