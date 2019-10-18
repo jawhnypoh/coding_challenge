@@ -3,6 +3,7 @@ class Info {
   String itemId;
   String title;
   String condition;
+  String brand;
   String description;
   ItemImage itemImage;
   Seller seller;
@@ -13,6 +14,7 @@ class Info {
     this.itemId,
     this.title,
     this.condition,
+    this.brand,
     this.description,
     this.itemImage,
     this.seller,
@@ -24,6 +26,7 @@ class Info {
     itemId: parsedJson['itemId'],
     title: parsedJson['title'],
     condition: parsedJson['condition'],
+    brand: parsedJson['brand'],
     description: parsedJson['shortDescription'],
     itemImage: ItemImage.fromJson(parsedJson['image']),
     seller: Seller.fromJson(parsedJson['seller']),
@@ -35,6 +38,7 @@ class Info {
     'itemId': itemId,
     'title': title,
     'condition': condition,
+    'brand': brand,
     'shortDescription': description,
     'itemImage': itemImage.toJson(),
     'seller': seller.toJson(),
