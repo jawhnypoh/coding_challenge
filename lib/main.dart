@@ -155,7 +155,6 @@ class EbaySearchState extends State<EbaySearch> {
 
   // Load more data from original API call's 'next' url
   void loadMoreData() async {
-    print('_loadMoreData() called, isLoading is ' + isLoading.toString());
     if(!isLoading) {
       setState(() {
         isLoading = true;
