@@ -17,7 +17,7 @@ class DetailedItemState extends State<DetailedItem> {
   @override
   void initState() {
     super.initState();
-    _getItemResults(itemId);
+    getItemResults(itemId);
   }
 
   @override
@@ -30,7 +30,7 @@ class DetailedItemState extends State<DetailedItem> {
           margin: const EdgeInsets.all(10.0),
           child: SingleChildScrollView(
             child: FutureBuilder<Info>(
-                future: _getItemResults(itemId),
+                future: getItemResults(itemId),
                 builder: (context, snapshot) {
                   if(snapshot.hasData) {
                     return Container(
@@ -92,18 +92,18 @@ class DetailedItemState extends State<DetailedItem> {
   }
 
   // Build the item detailed URL based on itemID
-  String _buildItemURL(String itemId) {
+  String buildItemURL(String itemId) {
     final String _finalURL = _itemURL + itemId;
     return _finalURL;
   }
 
   // Get the item detail results from API call
-  Future<Info> _getItemResults(String itemId) async {
+  Future<Info> getItemResults(String itemId) async {
     String encoded = ClientAuth().generateEncodedCredentials();
     String authToken = await ClientAuth().getAuthorizationToken(encoded);
     dio.options.headers = {'Authorization' : authToken};
     try {
-      final Response response = await dio.get<void>(_buildItemURL(itemId));
+      final Response response = await dio.get<void>(buildItemURL(itemId));
       print(response);
       final jsonResult = json.decode(response.toString());
       parsedJson = response.toString();

@@ -37,7 +37,7 @@ class EbaySearchState extends State<EbaySearch> {
     _scrollControler.addListener(() {
       // If reach the bottom of ListView, call _loadMoreData()
       if(_scrollControler.position.pixels == _scrollControler.position.maxScrollExtent) {
-        _loadMoreData();
+        loadMoreData();
       }
     });
   }
@@ -70,7 +70,7 @@ class EbaySearchState extends State<EbaySearch> {
         ),
         onSubmitted: (_queryText) {
           if(_queryText.isNotEmpty) {
-            _getQueryResults(_queryText);
+            getQueryResults(_queryText);
           }
         },
         style: TextStyle(
@@ -121,19 +121,19 @@ class EbaySearchState extends State<EbaySearch> {
   }
 
   // Build the query URL based on what user entered
-  String _buildQueryURL(String _queryText) {
+  String buildQueryURL(String _queryText) {
     final String _finalURL = _queryURL + 'q=' + _queryText;
     return _finalURL;
   }
 
   // Get results from eBay API with query text
-  void _getQueryResults(String _queryText) async {
+  Future<Response> getQueryResults(String _queryText) async {
     String encoded = ClientAuth().generateEncodedCredentials();
     authToken = await ClientAuth().getAuthorizationToken(encoded);
     dio.options.headers = {'Authorization' : authToken};
 
     try {
-      final Response response = await dio.get<void>(_buildQueryURL(_queryText));
+      final Response response = await dio.get<void>(buildQueryURL(_queryText));
       print(response);
       nextURL = response.data['next'];
       final List resultsList = List();
@@ -146,13 +146,15 @@ class EbaySearchState extends State<EbaySearch> {
         items = resultsList;
         isLoading = false;
       });
+      return response;
     } catch (e) {
       print(e);
+      return e;
     }
   }
 
   // Load more data from original API call's 'next' url
-  void _loadMoreData() async {
+  void loadMoreData() async {
     print('_loadMoreData() called, isLoading is ' + isLoading.toString());
     if(!isLoading) {
       setState(() {
