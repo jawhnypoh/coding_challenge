@@ -15,7 +15,7 @@ An eBay browsing application that allows the user to search for any item that's 
 
 ## Instructions
 You will need to provide your own `client_ID` and `client_secret` in order for the app to generate the proper credentials for the Application Access Token that is needed to access the API endpoints. 
-These variables are can be added as Strings in the `ClientAuth` class that's found in `utils/auth.dart`:
+These variables are added as Strings in the `ClientAuth` class that's found in `utils/auth.dart`:
 ```dart
 final String identifier = '<YOUR-CLIENT-ID>';
 final String secret = '<YOUR-CLIENT-SECRET>';
@@ -23,7 +23,7 @@ final String secret = '<YOUR-CLIENT-SECRET>';
 
 ## Bugs
 There may be some screens that appear to load indefinitely, or some that are red and show error messages. This only happens on rare ocassions and is the result of the API returning some (or all?) null values. Widgets cannot display null values, and so we get an error. \
-The infinite loading bug is caused by the API returning null values for estimated shipping dates and the app being unable to map the JSON response properly, and I couldn't figure out which values would return null from the API call when the red error screen appears (I believe the values that return null vary per every request). 
+The infinite loading bug is caused by the API returning null values for estimated shipping dates and the app being unable to map the JSON response properly, and I couldn't figure out which values were returned as null from the API call when the red error screen appeared (I believe the values that return null vary per every request). 
 
 ## Unit Testing
 Basic unit testing has been done on some of the functions in `main.dart`, `detailed_item.dart`, and all the functions within `auth.dart`.
